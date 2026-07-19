@@ -1,0 +1,59 @@
+name: Rugspull Read API
+description: >-
+  A read-only, GET-only discovery-cache REST API for Rugspull, a self-described high-risk parody DeFi protocol on BNB
+  Smart Chain (chain id 56). Exposes rebuildable discovery/indexed-event data with no write, settlement, or
+  transaction-proxy operations; on-chain BSC contracts remain the source of financial truth. Unauthenticated, free,
+  best-effort, with no published rate limits or SLA.
+url: https://rugspull-read-api.apievangelist.com/apis.yml
+created: '2026-07-19'
+modified: '2026-07-19'
+specificationVersion: '0.21'
+tags:
+  - bnb-smart-chain
+  - bsc
+  - wbnb
+  - read-only
+  - openapi
+  - high-risk
+  - discovery-cache
+  - defi
+  - web3
+  - crypto-market-data
+  - indexer
+apis:
+  - name: Rugspull Read API
+    description: >-
+      Nine GET-only endpoints providing service health, chain config, indexer status, discovery cache, indexed events,
+      event-derived market data, sparklines, and immutable metadata objects. Backed by a public OpenAPI 3.1 spec and
+      Postman collection, plus an llms.txt agent-native surface.
+    humanURL: https://github.com/pqchase/rugspull/blob/main/docs/INTEGRATION.md
+    baseURL: https://rugspull.com
+    tags:
+      - bnb-smart-chain
+      - bsc
+      - wbnb
+      - read-only
+      - openapi
+      - high-risk
+      - discovery-cache
+      - defi
+      - web3
+      - crypto-market-data
+      - indexer
+    properties:
+      - type: OpenAPI
+        url: https://rugspull.com/openapi.json
+      - type: PostmanCollection
+        url: https://rugspull.com/rugspull-read.postman_collection.json
+      - type: LLMSTxt
+        url: https://rugspull.com/llms.txt
+      - type: Documentation
+        url: https://github.com/pqchase/rugspull/blob/main/docs/INTEGRATION.md
+maintainers:
+  - FN: Rugspull
+    url: https://github.com/pqchase/rugspull
+generated:
+  by: apis.io/add
+  model: claude-opus-4-8
+  confidence: 95
+  at: '2026-07-19T04:30:26.648Z'
