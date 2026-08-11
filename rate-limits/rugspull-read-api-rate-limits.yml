@@ -1,0 +1,83 @@
+generated: '2026-08-11'
+method: searched
+source: >-
+  https://github.com/pqchase/rugspull/blob/main/docs/INTEGRATION.md +
+  https://rugspull.com/integration.json + https://rugspull.com/.well-known/api-onboarding +
+  https://rugspull.com/openapi.json (info.description)
+probed: 'live response headers observed on GET https://rugspull.com/api/rugs, 2026-08-11'
+description: >-
+  Rugspull publishes NO numeric rate limit and returns NO rate-limit headers. This is
+  a stated position, not an undocumented gap — four separate first-party documents say
+  so in the same words. The provider substitutes a client-side instruction (cache
+  responsibly, use exponential backoff) for a server-side signal.
+limit_count: 0
+limits: []
+published: false
+declared_absent: true
+declared_absent_evidence:
+  - source: https://rugspull.com/openapi.json
+    quote: No numeric rate-limit or uptime SLA is offered.
+  - source: https://github.com/pqchase/rugspull/blob/main/docs/INTEGRATION.md
+    quote: >-
+      There is no public numeric rate-limit or uptime SLA. Cache responsibly, use
+      exponential backoff, and handle warnings, partial history, RPC errors, reorgs,
+      and null timestamps explicitly.
+  - source: https://rugspull.com/integration.json
+    quote: 'readApi.numericRateLimitSla: false'
+  - source: https://rugspull.com/.well-known/api-onboarding
+    quote: 'economics.freeTier: Anonymous reads; no numeric rate-limit or uptime SLA is offered.'
+headers:
+  rate_limit: []
+  retry_after: false
+  observed: >-
+    A live GET returns no X-RateLimit-*, no RateLimit-* (RFC 9331 draft), and no
+    Retry-After. Response headers are limited to content-type, cache-control: no-store,
+    the CORS set, an RFC 8288 Link discovery header, content-security-policy,
+    x-content-type-options, and Cloudflare infrastructure headers (cf-ray, nel,
+    report-to, server).
+  full_header_set_observed:
+    - 'access-control-allow-origin: *'
+    - 'cache-control: no-store'
+    - 'link: </.well-known/api-catalog>; rel="api-catalog", </openapi.json>; rel="service-desc", <https://github.com/pqchase/rugspull/blob/main/docs/INTEGRATION.md>; rel="service-doc"'
+    - 'access-control-expose-headers: link'
+    - 'content-security-policy: default-src ''none''; frame-ancestors ''none'''
+    - 'x-content-type-options: nosniff'
+    - 'server: cloudflare'
+responseCodes:
+  throttled: null
+  note: >-
+    No 429 is declared in the OpenAPI on any of the nine operations and none was
+    observed. The only failure statuses in the contract are 400, 404 and 503.
+enforcement:
+  documented: false
+  note: >-
+    The API sits behind Cloudflare, so an undocumented edge protection layer may exist
+    (the CORS preflight advertises cf-turnstile-response and x-turnstile-token headers
+    for the app's own write surface). Nothing about that is published for the read API,
+    so an integrator cannot distinguish "no limit" from "an unstated limit enforced by
+    the edge". That ambiguity is the finding.
+agent_impact: >-
+  An autonomous consumer has no runtime backpressure signal at all: no quota headers to
+  read before exhaustion, no 429 to catch, no Retry-After to obey. Correct behaviour has
+  to be inferred from prose in a GitHub markdown file. Publishing RFC 9331 RateLimit
+  headers and a 429 response — even with generous values — would cost nothing and is the
+  cheapest agent-readiness improvement available to this provider.
+scope_of_absence:
+  per_key: 'not applicable — no keys; access is anonymous'
+  per_account: 'not applicable — no accounts'
+  per_endpoint: not published
+  per_ip: not published
+payload_ceilings:
+  note: >-
+    The contract does cap RESPONSE SIZE per call, which is the only quantitative
+    throttling of any kind in the spec. These are payload bounds, not rate limits.
+  caps:
+    - {operation: listRugs, param: limit, min: 1, max: 100, default: 25}
+    - {operation: getRugMarket, param: limit, min: 20, max: 500, default: 240}
+    - {operation: listRugEvents, cap: 100, note: 'maxItems in schema; no cursor to page past it'}
+    - {operation: listMarketSparklines, cap: '24 addresses, 16 prices each'}
+    - {operation: listRugs, param: cursor, min: 0, max: 1000000}
+cross_links:
+  conventions: conventions/rugspull-read-api-conventions.yml
+  plans: plans/rugspull-read-api-plans-pricing.yml
+  errors: errors/rugspull-read-api-problem-types.yml

@@ -1,0 +1,140 @@
+generated: '2026-08-11'
+method: probed
+source: live probes of /.well-known/ and root discovery paths on https://rugspull.com
+summary: >-
+  Rugspull publishes an unusually complete machine-readable discovery layer for a
+  single-host, nine-operation read API: an APIs.json 0.21 index, an RFC 9727 API
+  Catalog linkset, an RFC 9116 security.txt, and an API Onboarding descriptor —
+  all four returning real documents with correct media types. The site is a
+  single-page app served from Cloudflare, and its catch-all answers HTTP 200 with
+  the same 2,458-byte HTML shell for EVERY unrecognised /.well-known/* path. Those
+  200s are soft-404s, not documents, and are recorded below as misses.
+soft_404_warning: >-
+  Any /.well-known/* path not in the hit list below returns 200 text/html with the
+  site shell (Content-Length 2458, <title>Rugspull | Disclosed Rugpull Parody on BNB
+  Smart Chain</title>). Treat a 200 on this host as evidence only when the response
+  Content-Type is not text/html AND the body parses as the expected document type.
+hosts:
+  - host: https://rugspull.com
+    documents:
+      - path: /.well-known/apis.json
+        status: 200
+        content_type: application/json
+        file: rugspull-read-api-apis.json
+        real_document: true
+        note: APIs.json 0.21 index, aid rugspull.com:read-api, nine typed properties.
+      - path: /.well-known/api-catalog
+        status: 200
+        content_type: application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"
+        file: rugspull-read-api-api-catalog.json
+        real_document: true
+        note: >-
+          RFC 9727 linkset with service-desc (OpenAPI 3.1), service-doc (INTEGRATION.md),
+          service-meta (apis.json, api-onboarding, Postman) and status (/api/health) relations.
+          Also advertised as a Link header on every /api/* response.
+      - path: /.well-known/security.txt
+        status: 200
+        content_type: text/plain
+        file: rugspull-read-api-security.txt
+        real_document: true
+        note: >-
+          RFC 9116. Contact mailto:info@rugspull.com, Expires 2027-07-19, Canonical,
+          Preferred-Languages en/zh, Policy https://rugspull.com/community-safety.
+          Explicitly states no bounty and no response-time SLA.
+      - path: /.well-known/api-onboarding
+        status: 200
+        content_type: application/json; charset=utf-8
+        file: rugspull-read-api-api-onboarding.json
+        real_document: true
+        note: >-
+          API Onboarding Descriptor (aod 0.1). Declares maturity self-serve, account
+          required false, agentPolicy allowed, auth none, scopes model none.
+      - path: /.well-known/openid-configuration
+        status: 200
+        content_type: text/html
+        real_document: false
+        note: Soft-404 — SPA shell, not OIDC metadata. No OpenID Connect surface.
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        content_type: text/html
+        real_document: false
+        note: Soft-404 — SPA shell. No RFC 8414 authorization-server metadata.
+      - path: /.well-known/oauth-protected-resource
+        status: 200
+        content_type: text/html
+        real_document: false
+        note: Soft-404 — SPA shell. No RFC 9728 protected-resource metadata.
+      - path: /.well-known/ai-plugin.json
+        status: 200
+        content_type: text/html
+        real_document: false
+        note: >-
+          Soft-404 — SPA shell. A prior catalog round recorded this path as "detected
+          but unconfirmed"; this probe resolves it as an absence.
+      - path: /.well-known/agent-card.json
+        status: 200
+        content_type: text/html
+        real_document: false
+        note: Soft-404 — SPA shell. No A2A agent card. Nothing written to a2a/.
+      - path: /.well-known/agent.json
+        status: 200
+        content_type: text/html
+        real_document: false
+        note: Soft-404 — SPA shell. Legacy pre-0.3 A2A path also misses.
+      - path: /.well-known/mcp.json
+        status: 200
+        content_type: text/html
+        real_document: false
+        note: Soft-404 — SPA shell. No MCP discovery document.
+root_discovery:
+  - path: /openapi.json
+    status: 200
+    content_type: application/json
+    real_document: true
+    file: openapi/_original/rugspull-read-api-openapi.json
+    note: OpenAPI 3.1.0, info.version 0.4.0, nine GET operations. Served from the API host root.
+  - path: /llms.txt
+    status: 200
+    content_type: text/plain
+    real_document: true
+    file: llms/rugspull-read-api-llms.txt
+  - path: /integration.json
+    status: 200
+    content_type: application/json
+    real_document: true
+    file: rugspull-read-api-integration.json
+    note: >-
+      Non-standard but substantive first-party integration package (schemaVersion 1):
+      canonical identity, contract addresses, the nine indexed on-chain events, market
+      reconstruction arithmetic, and explicit third-party display boundaries.
+  - path: /rugspull-read.postman_collection.json
+    status: 200
+    content_type: application/json
+    real_document: true
+    file: collections/rugspull-read-api.postman_collection.json
+    note: Postman Collection v2.1.0, nine requests.
+  - path: /sitemap.xml
+    status: 200
+    content_type: application/xml
+    real_document: true
+    note: 60 URLs. Used to confirm the absence of pricing/terms/privacy/status/blog pages.
+  - path: /robots.txt
+    status: 200
+    content_type: text/plain
+    real_document: true
+    note: 'Allow: / with Disallow /ops and /account/. No agent-specific directives, no AIPREF signals.'
+  - path: /asyncapi.yaml
+    status: 200
+    content_type: text/html
+    real_document: false
+    note: Soft-404 — SPA shell. No AsyncAPI document.
+  - path: /openapi.yaml
+    status: 200
+    content_type: text/html
+    real_document: false
+    note: Soft-404 — SPA shell. JSON is the only serving of the spec.
+  - path: /mcp
+    status: 200
+    content_type: text/html
+    real_document: false
+    note: Soft-404 — SPA shell. No hosted MCP endpoint.

@@ -1,0 +1,213 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Rugspull Read API
+  version: 1.0.0
+  x-generated: '2026-08-11'
+  x-method: generated
+  x-source: >-
+    Generated from openapi/_original/rugspull-read-api-openapi.json (OpenAPI 3.1.0,
+    info.version 0.4.0) plus artifacts derived in this enrichment pass. Applies our
+    additions WITHOUT mutating the provider's document: real captured examples, the
+    error responses the implementation returns but the contract omits, agentic-access
+    execution contracts, and the semantic boundaries the provider states in prose
+    elsewhere but does not encode in the spec. Every value here is either observed on
+    the live API or quoted from a first-party Rugspull document — nothing is invented.
+extends: ../openapi/_original/rugspull-read-api-openapi.json
+actions:
+  - target: $.info
+    description: Record provenance and the machine-readable discovery surface the provider actually serves.
+    update:
+      x-apis-json: https://rugspull.com/.well-known/apis.json
+      x-api-catalog: https://rugspull.com/.well-known/api-catalog
+      x-llms-txt: https://rugspull.com/llms.txt
+      x-integration-package: https://rugspull.com/integration.json
+      x-api-onboarding: https://rugspull.com/.well-known/api-onboarding
+      x-security-txt: https://rugspull.com/.well-known/security.txt
+      x-postman-collection: https://rugspull.com/rugspull-read.postman_collection.json
+      x-source-repository: https://github.com/pqchase/rugspull
+      x-enriched-by: https://apievangelist.com
+
+  - target: $.info
+    description: >-
+      Encode the financial-truth and no-endorsement boundaries the provider repeats in
+      llms.txt, integration.json and INTEGRATION.md, so an agent reading only the spec
+      inherits them.
+    update:
+      x-authority:
+        system-of-record: BNB Smart Chain contract state and matching event history.
+        this-api: >-
+          A rebuildable discovery and indexed-event cache. Not financial truth, not a
+          price oracle, and not an availability, safety, or audit signal.
+        absence-is-not-proof: >-
+          A missing cache record is not proof that a contract or event does not exist.
+        rugged-is-a-state: >-
+          Rugged is a contract lifecycle state, not a scam verdict, safety label,
+          refund condition, or proof that related wallets stopped trading.
+        audit-status: >-
+          An independent audit has not been completed. Exact-match source and
+          project-authored tests are not an audit or safety certification.
+
+  - target: $
+    description: >-
+      Declare an explicit empty security requirement. The provider's own onboarding
+      descriptor states auth "none"; the spec merely omits security, which a strict
+      generator can read as "unspecified" rather than "anonymous".
+    update:
+      security: []
+
+  - target: $.info
+    description: >-
+      State the rate-limit and SLA position in the contract. The provider publishes it
+      in four other documents but not in the OpenAPI, so a spec-only consumer cannot
+      see it.
+    update:
+      x-rate-limit:
+        published: false
+        headers: []
+        status-on-exhaustion: null
+        guidance: >-
+          No numeric rate-limit or uptime SLA is offered. Cache responsibly and use
+          exponential backoff. All operations are safe GETs, so retry is always sound.
+
+  - target: $.paths['/api/health'].get.responses['200'].content['application/json']
+    description: Add the real captured response. The provider's spec carries no examples on any operation.
+    update:
+      example:
+        ok: true
+        service: rugspull-api
+
+  - target: $.paths['/api/config'].get.responses['200'].content['application/json']
+    description: Add the real captured response (probed 2026-08-11).
+    update:
+      example:
+        chainId: 56
+        factory: '0xDFF540baBCa2ee8A2A8Ff26359Ecc9c5921D8A63'
+        factories:
+          - '0xDFF540baBCa2ee8A2A8Ff26359Ecc9c5921D8A63'
+        financialTruth: BSC contracts
+        uploadsProtected: true
+        uploadsEnabled: true
+
+  - target: $.paths['/api/indexer/status'].get.responses['200'].content['application/json']
+    description: Add the real captured response (probed 2026-08-11).
+    update:
+      example:
+        chainId: 56
+        latestBlock: 115378684
+        factories:
+          - address: '0xDFF540baBCa2ee8A2A8Ff26359Ecc9c5921D8A63'
+            fromBlock: 109991561
+        staleBlockThreshold: 1200
+        sync:
+          - contract_address: '0xdff540babca2ee8a2a8ff26359ecc9c5921d8a63'
+            last_scanned_block: 115378245
+        warnings: []
+
+  - target: $.paths['/api/rugs'].get.responses['200'].content['application/json']
+    description: >-
+      Add the real captured response. The cache was empty at capture time, consistent
+      with the provider's NO-GO posture on organized mainnet activity.
+    update:
+      example:
+        rugs: []
+        nextCursor: 0
+
+  - target: $.paths['/api/market/sparklines'].get.responses['200'].content['application/json']
+    description: Add the real captured response (probed 2026-08-11).
+    update:
+      example:
+        chainId: 56
+        sparklines: {}
+
+  - target: $.components.schemas.Error
+    description: Add the real error bodies observed live, so the flat envelope has a shape.
+    update:
+      examples:
+        - error: Rug not indexed
+        - error: Invalid R2 object key
+
+  - target: $.paths['/api/r2/{key}'].get.responses
+    description: >-
+      Add the 400 the implementation actually returns for a key that fails the
+      public-key policy. Observed live; the published contract admits only 200 and 404,
+      so a spec-validating client treats a legitimate rejection as a protocol violation.
+    update:
+      '400':
+        $ref: '#/components/responses/Error'
+
+  - target: $.paths['/api/rugs/{chainId}/{rug}/events'].get.responses
+    description: >-
+      Declare the validation failure mode for a malformed chainId or address. The
+      operation currently declares a 200 only, despite carrying a pattern-constrained
+      path parameter.
+    update:
+      '400':
+        $ref: '#/components/responses/Error'
+
+  - target: $.paths['/api/rugs/{chainId}/{rug}/market'].get.responses
+    description: Same gap as listRugEvents — no declared failure response on a parameterised path.
+    update:
+      '400':
+        $ref: '#/components/responses/Error'
+
+  - target: $.paths['/api/rugs'].get
+    description: >-
+      Document the pagination contract explicitly. The spec exposes cursor and limit but
+      never says how to terminate a walk.
+    update:
+      x-pagination:
+        style: opaque-numeric-cursor
+        cursor-param: cursor
+        limit-param: limit
+        items-field: rugs
+        next-field: nextCursor
+        termination: >-
+          Continue while the returned rugs array is non-empty, passing nextCursor as the
+          next cursor. No explicit exhaustion sentinel is defined; an empty page returns
+          nextCursor 0.
+
+  - target: $.paths['/api/rugs/{chainId}/{rug}/events'].get
+    description: Record that the 100-row cap is a ceiling, not a page.
+    update:
+      x-result-ceiling:
+        max-items: 100
+        paginated: false
+        note: >-
+          Event history beyond 100 rows is not reachable through this API. Read the
+          chain directly for complete history.
+
+  - target: $.paths['/api/rugs/{chainId}/{rug}/market'].get
+    description: Encode the market-reconstruction arithmetic published in integration.json.
+    update:
+      x-derivation:
+        price: priceX18 = reserveQuote * 1e18 / reserveToken, after each LaunchSucceeded or Swap
+        buy-quote-volume: Swap.amountIn
+        sell-quote-volume: Swap.amountOut + Swap.protocolFeeQuote
+        protocol-fee-volume: sum(Swap.protocolFeeQuote)
+        ohlcv: false
+        reconciliation: >-
+          Compare RugPool.getReserves() against actual RugToken and WBNB balances. A
+          chart or cached row cannot substitute for balance reconciliation.
+        numeric-encoding: >-
+          Integer strings scaled by 1e18. Clients must use big-integer arithmetic and
+          must not parse these as JSON numbers.
+
+  - target: $.paths.*.get
+    description: >-
+      Attach the recommended agentic-access execution contract to every operation. All
+      nine are GET, so all nine classify as connected/read with no human-in-the-loop
+      requirement. See agentic-access/rugspull-read-api-agentic-access.yml.
+    update:
+      x-agentic-access:
+        action-class: connected
+        consequence: read
+        subject: optional
+        token:
+          max-ttl: 3600
+        audit: none
+
+  - target: $.paths.*.get
+    description: Mark every operation safe and idempotent per RFC 9110, so retry policy is machine-readable.
+    update:
+      x-safe: true
+      x-idempotent: true

@@ -1,0 +1,139 @@
+generated: '2026-08-11'
+method: probed
+source: Live unauthenticated GET requests against https://rugspull.com, captured 2026-08-11.
+description: 'Real response bodies captured from the live API, verbatim. The published OpenAPI 3.1 document
+  contains NO example or examples keyword on any of its nine operations, so an agent reading the spec
+  alone sees schemas but never a shape. These are that missing layer, and because the API is anonymous
+  and read-only they were reproducible without a credential. IMPORTANT CONTEXT FOR ANY CONSUMER: the discovery
+  cache was EMPTY at capture time — zero indexed Rugs on mainnet, consistent with the provider''s own
+  NO-GO posture on organized mainnet activity. The empty collections below are the true live state, not
+  a capture failure, and they are why no populated Rug, event, or market point appears here. Nothing in
+  this file is synthesised.'
+capture:
+  host: https://rugspull.com
+  date: '2026-08-11'
+  auth: none
+  cache_state: 'empty (rugs: [], indexer warnings: [])'
+examples:
+- operationId: getHealth
+  method: GET
+  path: /api/health
+  status: 200
+  content_type: application/json; charset=utf-8
+  response:
+    ok: true
+    service: rugspull-api
+  note: Liveness only. The provider is explicit that this is not chain, indexer, RPC, or financial-state
+    health.
+- operationId: getConfig
+  method: GET
+  path: /api/config
+  status: 200
+  content_type: application/json; charset=utf-8
+  response:
+    chainId: 56
+    factory: '0xDFF540baBCa2ee8A2A8Ff26359Ecc9c5921D8A63'
+    factories:
+    - '0xDFF540baBCa2ee8A2A8Ff26359Ecc9c5921D8A63'
+    financialTruth: BSC contracts
+    uploadsProtected: true
+    uploadsEnabled: true
+  note: Current chain id, the active Factory, the full factories list, and the financial-truth boundary
+    as a const string.
+- operationId: getIndexerStatus
+  method: GET
+  path: /api/indexer/status
+  status: 200
+  content_type: application/json; charset=utf-8
+  response:
+    chainId: 56
+    latestBlock: 115378684
+    factories:
+    - address: '0xDFF540baBCa2ee8A2A8Ff26359Ecc9c5921D8A63'
+      fromBlock: 109991561
+    staleBlockThreshold: 1200
+    sync:
+    - contract_address: '0xdff540babca2ee8a2a8ff26359ecc9c5921d8a63'
+      last_scanned_block: 115378245
+    warnings: []
+  note: Freshness signal. latestBlock is the chain head the indexer observed; sync[].last_scanned_block
+    trailed it by 439 blocks at capture. staleBlockThreshold 1200 is the provider-declared tolerance.
+    An empty warnings array does not create an SLA and does not prove complete history.
+- operationId: listRugs
+  method: GET
+  path: /api/rugs?limit=5
+  status: 200
+  content_type: application/json; charset=utf-8
+  response:
+    rugs: []
+    nextCursor: 0
+  note: Empty discovery cache. nextCursor 0 is returned alongside an empty page; the contract defines
+    no explicit exhaustion sentinel.
+- operationId: getRug
+  method: GET
+  path: /api/rugs/56/0x0000000000000000000000000000000000000001
+  status: 404
+  content_type: application/json; charset=utf-8
+  response:
+    error: Rug not indexed
+  note: Not-indexed error. The 404 is a statement about the CACHE, not about the chain.
+- operationId: listRugEvents
+  method: GET
+  path: /api/rugs/56/0x0000000000000000000000000000000000000001/events
+  status: 200
+  content_type: application/json; charset=utf-8
+  response:
+    events: []
+  note: Returns 200 with an empty array for an unknown address rather than 404 — inconsistent with getRug
+    on the same address, and undeclared in the spec.
+- operationId: getRugMarket
+  method: GET
+  path: /api/rugs/56/0x0000000000000000000000000000000000000001/market?limit=20
+  status: 200
+  content_type: application/json; charset=utf-8
+  response:
+    chainId: 56
+    rug: '0x0000000000000000000000000000000000000001'
+    source: indexed BSC events
+    points: []
+    markers: []
+    stats:
+      tradeCount: 0
+      buyQuoteVolume: '0'
+      sellQuoteVolume: '0'
+      protocolFeeQuote: '0'
+      latestPriceX18: '0'
+      updatedBlock: 0
+      complete: true
+      priceChangeBps: '0'
+      visiblePointCount: 0
+  note: 'Also 200 for an unknown address. Shows the full stats envelope with zeroed integer-string values
+    and complete: true — note that complete refers to the cached series, not to chain history.'
+- operationId: listMarketSparklines
+  method: GET
+  path: /api/market/sparklines?chainId=56
+  status: 200
+  content_type: application/json; charset=utf-8
+  response:
+    chainId: 56
+    sparklines: {}
+  note: Address-keyed map, empty with no rugs parameter supplied.
+- operationId: getPublicObject
+  method: GET
+  path: /api/r2/metadata/deadbeef.json
+  status: 400
+  content_type: application/json; charset=utf-8
+  response:
+    error: Invalid R2 object key
+  note: Public-key policy rejection. The 400 is NOT declared on this operation in the OpenAPI, which admits
+    only 200 and 404 — a real spec/implementation divergence, recorded in errors/.
+findings:
+- The spec declares zero examples across nine operations; every shape below had to be probed.
+- listRugEvents and getRugMarket return 200 with empty payloads for an address that getRug 404s. Three
+  operations, one unknown address, two different answers about whether it exists.
+- getPublicObject returns an undeclared 400 for a key that fails the public-key policy.
+- Large numeric values are integer strings scaled by 1e18 (priceX18 and the volume fields in stats), so
+  clients must use big-integer arithmetic and must not parse them as JSON numbers.
+cross_links:
+  errors: errors/rugspull-read-api-problem-types.yml
+  conventions: conventions/rugspull-read-api-conventions.yml

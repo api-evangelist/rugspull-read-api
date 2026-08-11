@@ -1,0 +1,53 @@
+generated: '2026-08-11'
+method: searched
+source: https://rugspull.com/.well-known/api-onboarding
+docs: https://github.com/pqchase/rugspull/blob/main/docs/INTEGRATION.md
+spec_source: openapi/rugspull-read-api-openapi.yml
+summary: >-
+  The Rugspull Read API is fully anonymous. The OpenAPI 3.1 document declares no
+  components.securitySchemes and no root or per-operation security requirement, and
+  the provider's own API Onboarding descriptor states auth "none" and account
+  required false in machine-readable form. This is a deliberate, documented absence
+  rather than an undocumented one: the API is GET-only over a rebuildable public
+  cache, so there is no principal to authenticate and nothing to authorize.
+model: none
+schemes: []
+security_requirement_declared: false
+account_required: false
+registration_required: false
+api_key_required: false
+agent_policy: allowed
+agent_policy_source: https://rugspull.com/.well-known/api-onboarding
+credentials: []
+scopes:
+  model: none
+  note: >-
+    No authorization scopes exist. The provider states this explicitly in the
+    onboarding descriptor: "No authorization scopes exist because this descriptor
+    covers read-only public cache endpoints only." scopes/ is intentionally absent.
+cors:
+  enabled: true
+  allow_origin: '*'
+  allow_methods: [GET, POST, OPTIONS]
+  allow_headers: [authorization, content-type, cf-turnstile-response, x-turnstile-token]
+  expose_headers: [link]
+  max_age: 86400
+  observed: 'live response headers on GET https://rugspull.com/api/rugs, 2026-08-11'
+  note: >-
+    The CORS preflight advertises POST and the Turnstile headers even though every
+    published operation is a GET. Those headers belong to the write surface the
+    Worker serves for the app itself (creation/upload flows behind /ops and /account/,
+    both Disallowed in robots.txt); they are not part of the published read contract.
+settlement_boundary: >-
+  Wallets sign financial actions on BNB Smart Chain directly. The API never buys,
+  sells, rugs, claims, refunds, or signs a transaction on a user's behalf, so no
+  delegated-authority or consent model is required for the published surface.
+gaps:
+  - No OAuth 2.0, OpenID Connect, or API-key surface exists to document.
+  - >-
+    Because access is anonymous and unmetered, there is no per-caller identity to
+    attach a rate limit, quota, or abuse policy to — see rate-limits/.
+cross_links:
+  conventions: conventions/rugspull-read-api-conventions.yml
+  well_known: well-known/rugspull-read-api-well-known.yml
+  rate_limits: rate-limits/rugspull-read-api-rate-limits.yml

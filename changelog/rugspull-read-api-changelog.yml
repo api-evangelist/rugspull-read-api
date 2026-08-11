@@ -1,0 +1,51 @@
+generated: '2026-08-11'
+method: searched
+source: https://api.github.com/repos/pqchase/rugspull/releases
+url: https://github.com/pqchase/rugspull/releases
+format: github-releases
+scheme: semver
+current_version: 0.4.0
+api_spec_version: 0.4.0
+dated: true
+machine_readable: true
+note: >-
+  There is no changelog page on rugspull.com — /changelog returns the SPA shell and
+  the sitemap lists no such URL. The provider's dated change record is the GitHub
+  Releases feed on the source monorepo, which is machine-readable via the GitHub API
+  and Atom feed. It carries exactly one entry: the project has published a single
+  evidence prerelease and nothing since. Repository last pushed 2026-07-30.
+entry_count: 1
+entries:
+  - version: v0.4.0-evidence.1
+    name: Rugspull v0.4.0 — evidence snapshot 1
+    date: '2026-07-19'
+    published_at: '2026-07-19T16:06:25Z'
+    prerelease: true
+    breaking: []
+    additions:
+      - Public evidence checkpoint for the BSC-first MVP.
+      - >-
+        Canonical identity published: BNB Smart Chain mainnet chain id 56, Factory
+        0xDFF540baBCa2ee8A2A8Ff26359Ecc9c5921D8A63, WBNB-only quote asset.
+    highlights: >-
+      Framed by the provider as an evidence checkpoint rather than a launch: explicitly
+      "not a launch announcement, an invitation to create or trade a new mainnet Rug,
+      an audit, a safety certification, or a promise of liquidity, execution, recovery,
+      or returns." Organized new mainnet activity recorded as NO-GO while activation
+      gates remain unresolved.
+    url: https://github.com/pqchase/rugspull/releases/tag/v0.4.0-evidence.1
+gaps:
+  - >-
+    No API-specific changelog. Release notes describe the protocol and the evidence
+    snapshot; a consumer of the nine read endpoints cannot tell from this feed whether
+    the contract changed.
+  - >-
+    A single release means there is no observable cadence and no history against which
+    to judge stability. The OpenAPI carries no per-operation change annotations.
+  - >-
+    Releases are not linked from any machine-readable discovery document — neither
+    apis.json, api-catalog, nor llms.txt names the releases feed.
+feeds:
+  atom: https://github.com/pqchase/rugspull/releases.atom
+cross_links:
+  lifecycle: lifecycle/rugspull-read-api-lifecycle.yml

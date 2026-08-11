@@ -1,0 +1,40 @@
+generated: '2026-08-11'
+method: generated
+source: >-
+  Generated from openapi/rugspull-read-api-openapi.yml plus the conventions, errors and
+  data-model artifacts derived in this pass. Every operationId referenced in every skill
+  was verified against the spec. No provider-published skills or AGENTS.md exist — the
+  GitHub repository tree (179 paths) contains no skills/ directory, no AGENTS.md, and no
+  agent instructions, and llms.txt names none.
+searched_first: true
+searched_result: none
+api: openapi/rugspull-read-api-openapi.yml
+base_url: https://rugspull.com
+auth: none
+note: >-
+  Three skills cover the whole nine-operation surface. The recurring theme across all
+  three is not mechanics but LANGUAGE: this provider publishes precise boundaries about
+  what its data does and does not mean (cache vs financial truth, Rugged as a state not
+  a verdict, refunds as user-initiated, exact-match source as not an audit), and an
+  agent that reports the numbers without the boundaries misrepresents the protocol.
+  Each skill carries those rules inline.
+skills:
+  - file: rugspull-read-api-discover-and-inspect-a-rug.md
+    name: Discover and inspect a Rug
+    api: openapi/rugspull-read-api-openapi.yml
+    operations: [getConfig, getIndexerStatus, listRugs, getRug, listRugEvents]
+  - file: rugspull-read-api-reconstruct-market-data.md
+    name: Reconstruct market data correctly
+    api: openapi/rugspull-read-api-openapi.yml
+    operations: [getIndexerStatus, getRugMarket, listMarketSparklines]
+  - file: rugspull-read-api-verify-before-you-integrate.md
+    name: Verify before you integrate or list
+    api: openapi/rugspull-read-api-openapi.yml
+    operations: [getConfig, getIndexerStatus, getRug, getPublicObject]
+operation_coverage:
+  covered: [getConfig, getIndexerStatus, listRugs, getRug, listRugEvents, getRugMarket, listMarketSparklines, getPublicObject]
+  uncovered: [getHealth]
+  uncovered_note: >-
+    getHealth is a bare liveness probe with no parameters and no agent-facing decision
+    attached to it; getIndexerStatus is the freshness check that actually matters and is
+    covered in all three skills.

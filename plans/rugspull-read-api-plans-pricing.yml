@@ -1,0 +1,55 @@
+generated: '2026-08-11'
+method: searched
+source: >-
+  https://rugspull.com/.well-known/api-onboarding + https://rugspull.com/sitemap.xml +
+  https://rugspull.com/fees
+description: >-
+  There are no API plans. Access to all nine read operations is anonymous, free, and
+  unmetered — no account, no key, no registration, no payment. The provider states
+  this in machine-readable form rather than leaving it to be inferred. rugspull.com
+  publishes no /pricing page at all (the SPA catch-all answers 200 with the site shell
+  for that path, and the sitemap does not list it); the only fee page it publishes,
+  /fees, documents on-chain PROTOCOL economics for traders, not API pricing.
+plan_count: 0
+plans: []
+free_tier:
+  exists: true
+  price: 0
+  currency: null
+  account_required: false
+  api_key_required: false
+  registration: none
+  quota: unmetered
+  overage: not applicable
+  limits: 'none published — see rate-limits/rugspull-read-api-rate-limits.yml'
+  source_quote: >-
+    "No registration, account, API key, wallet signature, or payment is required for
+    the nine GET-only discovery-cache endpoints." — /.well-known/api-onboarding
+  economics_quote: >-
+    "Anonymous reads; no numeric rate-limit or uptime SLA is offered." —
+    /.well-known/api-onboarding economics.freeTier
+enterprise_contact_only: false
+monetization_model: none
+protocol_fees:
+  note: >-
+    Recorded for completeness and explicitly NOT an API price. These are on-chain fees
+    charged by the Rugspull protocol to traders on BNB Smart Chain, taken in WBNB by
+    smart contract. Nothing in this section is billed by, or payable to, the Read API.
+  source: https://rugspull.com/integration.json
+  human_page: https://rugspull.com/fees
+  nominal_trade_fee_bps: 30
+  pool_retention_bps: 25
+  protocol_treasury_bps: 5
+  currency: WBNB
+  note_rounding: Subject to integer rounding; the treasury address is immutable.
+gaps:
+  - >-
+    No terms of service and no privacy policy are published anywhere on the host — a
+    consumer accepts no agreement to use the API, and none is offered. The onboarding
+    descriptor records this as termsOfService.acceptance "none".
+  - >-
+    A free unmetered API with no account and no published limit has no lever to manage
+    abuse other than the undocumented Cloudflare edge in front of it.
+cross_links:
+  rate_limits: rate-limits/rugspull-read-api-rate-limits.yml
+  authentication: authentication/rugspull-read-api-authentication.yml

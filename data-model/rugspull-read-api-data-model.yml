@@ -1,0 +1,165 @@
+generated: '2026-08-11'
+method: derived
+source: >-
+  Derived from components.schemas and the path/parameter structure of
+  openapi/rugspull-read-api-openapi.yml, cross-referenced with the event catalog and
+  field semantics published in https://rugspull.com/integration.json and
+  https://github.com/pqchase/rugspull/blob/main/docs/INTEGRATION.md
+docs: https://rugspull.com/api-reference
+notation: >-
+  relationships use has_one / has_many / belongs_to with the linking field name;
+  direction is from the entity that owns the reference. Identity in this domain is an
+  EVM address, not an opaque id prefix, so the id column records the address role
+  rather than a prefix string.
+caveat: >-
+  The OpenAPI is deliberately loose about the entities themselves: RugList.rugs,
+  listRugEvents.events, MarketSeries.points and MarketSeries.markers are all typed as
+  objects with additionalProperties true. The graph below is therefore derived from the
+  DOCUMENTED domain (integration.json's event table and market-reconstruction rules)
+  rather than read off the schemas, which do not describe their own row shapes. Fields
+  marked derived_from_docs are real and published, but they are not in the contract —
+  which is itself the finding: a generated client gets `any` for every domain row.
+entities:
+  - name: RugFactory
+    id: EVM contract address
+    domain: chain
+    canonical: '0xDFF540baBCa2ee8A2A8Ff26359Ecc9c5921D8A63'
+    description: >-
+      The discovery root. Deployed at block 109991561 on chain 56 with exact-match
+      source on BscScan and Sourcify. Emits RugCreated. Surfaced by getConfig as
+      `factory` plus a `factories` array for historical factories.
+  - name: RugInstance
+    id: EVM contract address
+    domain: chain
+    aliases: [Rug]
+    description: >-
+      One Rug lifecycle. Created by RugFactory, moves through Opening -> (Failed |
+      Active) -> Rugged. Holds the 45% Founder Allocation immobile through a 24-hour
+      Opening plus a further 48-hour lock, after which it may be sold once in full and
+      never in pieces. This is the entity addressed by the {rug} path parameter.
+    api_shape: 'getRug returns { rug: object } with additionalProperties true'
+  - name: RugToken
+    id: EVM contract address
+    domain: chain
+    description: >-
+      A separate fixed-supply ERC-20 per Rug. There is no platform token. The address
+      exists only after LaunchSucceeded; the provider warns against inferring or
+      pre-registering it.
+  - name: RugPool
+    id: EVM contract address
+    domain: chain
+    description: >-
+      Rugspull's internal non-upgradeable constant-product AMM for one Rug, quoted in
+      WBNB only. Issues no LP token and exposes no reserve-withdraw function. Not
+      PancakeSwap. Nominal trade fee 30 bps, split 25 bps retained in the pool and
+      5 bps to the immutable protocol treasury.
+  - name: RugEvent
+    id: (blockNumber, logIndex)
+    domain: index
+    description: >-
+      One indexed on-chain log, ordered by block number then log index. Nine event
+      names make up the whole vocabulary. Capped at 100 rows per Rug with no cursor.
+    derived_from_docs: true
+  - name: MarketPoint
+    id: (rug, blockNumber)
+    domain: market
+    description: >-
+      A price observation reconstructed after each LaunchSucceeded or Swap as
+      priceQuoteX18 = reserveQuote * 1e18 / reserveToken. Event-derived, not an oracle,
+      and not OHLCV — the provider states no candle endpoint exists.
+  - name: MarketMarker
+    id: (rug, blockNumber)
+    domain: market
+    description: The RugPulled marker overlaid on a series, distinguishing the one-shot Founder Allocation exit from ordinary swaps.
+  - name: MarketStats
+    id: rug
+    domain: market
+    description: >-
+      Cached aggregate per Rug. Live shape observed 2026-08-11 — tradeCount,
+      buyQuoteVolume, sellQuoteVolume, protocolFeeQuote, latestPriceX18, updatedBlock,
+      complete, priceChangeBps, visiblePointCount. Volumes and prices are integer
+      strings scaled 1e18.
+    derived_from_docs: true
+  - name: Sparkline
+    id: rug
+    domain: market
+    description: Up to 16 recent priceX18 integer strings per Rug, for up to 24 Rugs per call.
+  - name: IndexerCheckpoint
+    id: contract_address
+    domain: index
+    description: >-
+      Per-contract scan position (last_scanned_block) compared against the observed
+      chain head (latestBlock) with a staleBlockThreshold of 1200 blocks. The freshness
+      contract for everything else in this graph.
+  - name: PublicObject
+    id: 'R2 key: metadata/<hash>.json or assets/<hash>.<ext>'
+    domain: storage
+    description: >-
+      Immutable content-addressed metadata JSON or image bytes. Keys that fail the
+      public-key policy are rejected with an undeclared 400.
+relationships:
+  - {from: RugFactory, to: RugInstance, kind: has_many, via: 'RugCreated event'}
+  - {from: RugInstance, to: RugToken, kind: has_one, via: 'LaunchSucceeded event'}
+  - {from: RugInstance, to: RugPool, kind: has_one, via: 'LaunchSucceeded event'}
+  - {from: RugInstance, to: RugEvent, kind: has_many, via: rug}
+  - {from: RugPool, to: RugEvent, kind: has_many, via: 'Swap event'}
+  - {from: RugInstance, to: MarketPoint, kind: has_many, via: rug}
+  - {from: RugInstance, to: MarketMarker, kind: has_many, via: 'RugPulled event'}
+  - {from: RugInstance, to: MarketStats, kind: has_one, via: rug}
+  - {from: RugInstance, to: Sparkline, kind: has_one, via: rug}
+  - {from: RugInstance, to: PublicObject, kind: has_one, via: 'metadata hash bound at RugCreated'}
+  - {from: RugFactory, to: IndexerCheckpoint, kind: has_one, via: contract_address}
+  - {from: MarketPoint, to: RugPool, kind: belongs_to, via: 'reserves at event time'}
+lifecycle_states:
+  entity: RugInstance
+  states: [Opening, Failed, Active, Rugged]
+  monotonic: true
+  transitions:
+    - {from: Opening, to: Failed, trigger: LaunchFailed, note: 'Exposes user-initiated refund eligibility. Refunds are NOT automatic.'}
+    - {from: Opening, to: Active, trigger: LaunchSucceeded, note: 'Binds Token and RugPool, accepted contribution, opening allocation, initial reserves, Founder Allocation.'}
+    - {from: Active, to: Rugged, trigger: RugPulled, note: 'The one full protocol-held Founder Allocation exit. Trading in the canonical pool can continue afterwards.'}
+  semantics_warning: >-
+    Rugged is a contract lifecycle state, not a scam verdict, safety label, refund
+    condition, loss calculation, or proof that creator-associated wallets stopped
+    trading. Consumers rendering this field must not relabel it.
+events:
+  source: https://rugspull.com/integration.json
+  catalog:
+    - {contract: RugFactory, name: RugCreated, binds: 'creator, stake, Opening end, metadata hash, disclosure hash'}
+    - {contract: RugInstance, name: Contributed, note: 'wallet count is not a unique-person count'}
+    - {contract: RugInstance, name: LaunchSucceeded, binds: 'Token, RugPool, accepted contribution, opening allocation, initial reserves, Founder Allocation'}
+    - {contract: RugInstance, name: LaunchFailed, binds: 'Failed state, refund eligibility'}
+    - {contract: RugInstance, name: ClaimedOpening, binds: 'token claim + excess-contribution refund executed by one wallet'}
+    - {contract: RugInstance, name: ClaimedFailedRefund, binds: 'Failed contribution refund executed by one wallet'}
+    - {contract: RugInstance, name: CreatorStakeWithdrawn, binds: 'creator stake withdrawal after Failed'}
+    - {contract: RugPool, name: Swap, binds: 'side, amounts, protocol fee, post-event reserves, price, WBNB volume'}
+    - {contract: RugInstance, name: RugPulled, binds: 'the one full Founder Allocation exit and quote received'}
+derived_quantities:
+  price_x18: reserveQuote * 1e18 / reserveToken
+  buy_quote_volume: Swap.amountIn
+  sell_quote_volume: Swap.amountOut + Swap.protocolFeeQuote
+  protocol_fee_volume: sum(Swap.protocolFeeQuote)
+  reserve_check: Compare RugPool.getReserves() against actual RugToken and WBNB balances.
+  note: >-
+    All quantities are integers. The provider states a chart or cached row cannot
+    substitute for balance reconciliation.
+authority:
+  system_of_record: BNB Smart Chain contract state and matching event history.
+  cache: >-
+    The Cloudflare Worker and its D1 database are rebuildable projections. Every entity
+    above can be reconstructed from the chain; none of it is financial truth.
+operation_coverage:
+  - {entity: RugInstance, read_by: [listRugs, getRug]}
+  - {entity: RugEvent, read_by: [listRugEvents]}
+  - {entity: MarketPoint, read_by: [getRugMarket]}
+  - {entity: MarketStats, read_by: [getRugMarket]}
+  - {entity: Sparkline, read_by: [listMarketSparklines]}
+  - {entity: IndexerCheckpoint, read_by: [getIndexerStatus]}
+  - {entity: RugFactory, read_by: [getConfig]}
+  - {entity: PublicObject, read_by: [getPublicObject]}
+  - {entity: RugToken, read_by: [], note: 'No operation returns a token record directly; the address arrives inside an untyped rug or event object.'}
+  - {entity: RugPool, read_by: [], note: 'Same — reachable only as a field on an untyped row, or by reading the chain.'}
+cross_links:
+  openapi: openapi/rugspull-read-api-openapi.yml
+  conventions: conventions/rugspull-read-api-conventions.yml
+  examples: examples/rugspull-read-api-examples.yml

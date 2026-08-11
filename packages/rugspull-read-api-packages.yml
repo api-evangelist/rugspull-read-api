@@ -1,0 +1,99 @@
+generated: '2026-08-11'
+method: searched
+source: >-
+  https://api.github.com/repos/pqchase/rugspull/git/trees/main?recursive=1 +
+  package.json manifests in the monorepo, checked against registry.npmjs.org
+  on 2026-08-11
+description: >-
+  Rugspull ships NO published client SDK. The monorepo contains three first-party
+  TypeScript workspace packages, but none of them is published to npm or any other
+  registry — every registry lookup returned 404 — and none is a client for the Read
+  API. A consumer of the nine GET endpoints has no installable library in any language
+  and must hand-roll HTTP calls, which is what the provider's own quickstart does
+  (raw curl in INTEGRATION.md). No SDKs pointer is emitted, because there is no SDK.
+registries_checked:
+  - {registry: npm, endpoint: 'https://registry.npmjs.org/<pkg>', queried: 4, found: 0}
+package_count: 3
+published_package_count: 0
+client_sdk_count: 0
+packages:
+  - name: '@rugspull/contracts-ts'
+    language: typescript
+    registry: null
+    registry_status: 404
+    registry_url_checked: https://registry.npmjs.org/@rugspull%2Fcontracts-ts
+    version: 0.4.0
+    version_source: package.json in the source monorepo (not a registry release)
+    published: null
+    official: true
+    installable: false
+    source: https://github.com/pqchase/rugspull/tree/main/packages/contracts-ts
+    dependencies: [viem ^2.53.1]
+    purpose: >-
+      Contract ABIs and chain constants for reading Rugspull contracts directly from
+      BNB Smart Chain via viem. An ON-CHAIN client, not a Read API client.
+    note: >-
+      Checked, not found. Version 0.4.0 is read from the committed package.json; there
+      is no registry release and therefore no publish date. Consumable only by cloning
+      the repo or vendoring the files (the integration package links the raw sources at
+      packages/contracts-ts/src/abi.ts and src/index.ts).
+  - name: '@rugspull/economics'
+    language: typescript
+    registry: null
+    registry_status: 404
+    registry_url_checked: https://registry.npmjs.org/@rugspull%2Feconomics
+    version: 0.4.0
+    version_source: package.json in the source monorepo (not a registry release)
+    published: null
+    official: true
+    installable: false
+    source: https://github.com/pqchase/rugspull/tree/main/packages/economics
+    purpose: >-
+      Shared economic arithmetic — the constant-product AMM and fee-split math that the
+      Worker, the web app and the Foundry tests all agree on. Vitest-covered.
+    note: Checked, not found on npm. Same story as contracts-ts.
+  - name: '@rugspull/api'
+    language: typescript
+    registry: null
+    registry_status: 404
+    registry_url_checked: https://registry.npmjs.org/@rugspull%2Fapi
+    version: 0.4.0
+    version_source: package.json in the source monorepo
+    published: null
+    official: true
+    installable: false
+    private: true
+    source: https://github.com/pqchase/rugspull/tree/main/workers/api
+    purpose: >-
+      The Cloudflare Worker that SERVES this API (wrangler deploy). This is the server
+      implementation, marked "private": true in its manifest — it is not a client
+      library and was never intended for distribution. Listed here so the inventory is
+      complete, not as a consumable package.
+    note: Checked, not found on npm; explicitly private.
+root_manifest:
+  name: rugspull
+  version: 0.4.0
+  private: true
+  workspaces: [packages/*, apps/*, workers/*]
+  note: The monorepo root is itself marked private, so nothing publishes by default.
+other_registries:
+  note: >-
+    PyPI, Maven Central, NuGet, pkg.go.dev, RubyGems, Packagist and crates.io were not
+    queried individually because the provider publishes no SDK documentation naming any
+    language, and the entire source tree is TypeScript/Solidity. No language-specific
+    client is referenced from apis.json, api-catalog, llms.txt, integration.json or
+    INTEGRATION.md — the four documents that between them enumerate every resource the
+    provider considers public.
+alternatives_offered:
+  - {type: PostmanCollection, url: 'https://rugspull.com/rugspull-read.postman_collection.json', note: 'Nine requests; the closest thing to a client the provider ships.'}
+  - {type: OpenAPI, url: 'https://rugspull.com/openapi.json', note: 'Complete enough to generate a client from; that is the intended path.'}
+  - {type: curl, url: 'https://github.com/pqchase/rugspull/blob/main/docs/INTEGRATION.md', note: 'Copy-pasteable curl quickstart for six of the nine operations.'}
+gaps:
+  - >-
+    No installable client in any language. For a nine-operation anonymous GET API this
+    is a low-cost gap: a generated TypeScript client from the existing OpenAPI would
+    close it.
+  - >-
+    Two genuinely reusable first-party packages (contracts-ts, economics) sit
+    unpublished behind a private root manifest, so integrators who want the ABI and the
+    fee arithmetic must vendor source files rather than depend on a version.

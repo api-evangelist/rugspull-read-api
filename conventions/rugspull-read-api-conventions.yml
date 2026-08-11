@@ -1,0 +1,160 @@
+generated: '2026-08-11'
+method: searched
+source: >-
+  https://github.com/pqchase/rugspull/blob/main/docs/INTEGRATION.md +
+  https://rugspull.com/integration.json + https://rugspull.com/.well-known/api-onboarding,
+  reconciled against openapi/rugspull-read-api-openapi.yml and live response headers
+  observed 2026-08-11.
+summary: >-
+  Cross-cutting request/response semantics for the Rugspull Read API. Nine GET
+  operations, anonymous, JSON only, cursor-paginated on one collection, no
+  idempotency-key mechanism because the API exposes no unsafe method. The dominant
+  convention is not technical but semantic: every document the provider publishes
+  restates the same financial-truth boundary — the API is a rebuildable cache and
+  BNB Smart Chain contract state is authoritative.
+authentication:
+  style: none
+  see: authentication/rugspull-read-api-authentication.yml
+http_methods:
+  published: [GET]
+  note: >-
+    All nine operations are GET. The OpenAPI declares no POST/PUT/PATCH/DELETE. CORS
+    preflight advertises POST for the app's own non-published write surface.
+idempotency:
+  supported: true
+  mechanism: http-method-semantics
+  idempotency_key_header: null
+  scope: all operations
+  retention: not applicable
+  note: >-
+    Every published operation is an HTTP GET and is therefore both SAFE and IDEMPOTENT
+    under RFC 9110 section 9.2.1/9.2.2 — an agent may retry any call in this contract
+    any number of times without additional effect. There is NO idempotency-key
+    mechanism, and none is required, because the API exposes no state-changing
+    operation. Retries are further encouraged by the provider, which instructs
+    integrators to "use exponential backoff" in INTEGRATION.md. Do not read this as
+    an Idempotency-Key implementation: if Rugspull ever publishes a write endpoint,
+    this entry must be re-derived.
+  evidence:
+    - 'openapi/rugspull-read-api-openapi.yml — 9/9 operations are GET'
+    - 'https://github.com/pqchase/rugspull/blob/main/docs/INTEGRATION.md — "use exponential backoff"'
+    - 'https://rugspull.com/integration.json — readApi.executionEndpoints: false'
+caching:
+  response_header: 'cache-control: no-store'
+  observed_on: GET /api/rugs, GET /api/config, GET /api/indexer/status
+  etag: false
+  last_modified: false
+  conditional_requests: false
+  note: >-
+    The origin sets no-store on API responses, so HTTP caching is disabled at the
+    edge and in the client. The provider nonetheless instructs integrators to "cache
+    responsibly" at the application layer. There is no ETag or If-None-Match support,
+    so a client cannot revalidate cheaply — polling is full-response every time.
+pagination:
+  style: opaque-numeric-cursor
+  applies_to: [listRugs]
+  request_params:
+    cursor: {in: query, type: integer, minimum: 0, maximum: 1000000, default: 0}
+    limit: {in: query, type: integer, minimum: 1, maximum: 100, default: 25}
+  response_fields:
+    items: rugs
+    next: nextCursor
+  termination: >-
+    Continue while the returned page is non-empty; nextCursor is the value to pass as
+    cursor on the following request. The spec does not define a sentinel for
+    exhaustion, and a live call returns nextCursor 0 alongside an empty rugs array.
+  hard_caps:
+    listRugEvents: 100 events per response, maxItems enforced in the schema; no cursor is exposed, so event history beyond 100 rows is not reachable through this API.
+    getRugMarket: limit 20-500, default 240
+    listMarketSparklines: 24 addresses maximum, 16 prices per address maximum
+  note: >-
+    Only listRugs is paginated. listRugEvents is capped rather than paginated — a
+    genuine ceiling on the contract, not a convention.
+filtering:
+  listRugs:
+    status: {enum: [Opening, Failed, Active, Rugged]}
+  note: Single enum filter; no sorting, field selection, or sparse-fieldset support.
+field_expansion:
+  supported: false
+metadata:
+  supported: false
+request_id_tracing:
+  header: null
+  note: >-
+    No X-Request-Id or Request-Id is returned. The only correlation identifier on a
+    response is Cloudflare's cf-ray, which is infrastructure-scoped and not documented
+    by the provider as a support handle.
+discovery_headers:
+  link: '</.well-known/api-catalog>; rel="api-catalog", </openapi.json>; rel="service-desc", <https://github.com/pqchase/rugspull/blob/main/docs/INTEGRATION.md>; rel="service-doc"'
+  note: >-
+    Every /api/* response carries an RFC 8288 Link header pointing at the API catalog,
+    the OpenAPI, and the human guide, and access-control-expose-headers makes it
+    readable from a browser. This is runtime discovery done correctly and is rarer
+    than the artifacts themselves.
+versioning:
+  scheme: document-version-only
+  current: 0.4.0
+  in_path: false
+  in_header: false
+  negotiation: none
+  note: >-
+    info.version is 0.4.0 and tracks the monorepo release tag; the URL carries no
+    version segment and no version header is accepted or returned. A breaking change
+    would be indistinguishable at the wire level. See lifecycle/.
+error_envelope:
+  media_type: application/json
+  shape: '{ "error": string }'
+  rfc9457: false
+  see: errors/rugspull-read-api-problem-types.yml
+rate_limit_signaling:
+  headers: []
+  status_on_exhaustion: null
+  note: >-
+    No X-RateLimit-*, RateLimit-*, or Retry-After header is returned, and the provider
+    states there is no numeric rate limit. An agent has no runtime backpressure signal
+    to read. See rate-limits/.
+content_negotiation:
+  formats: [application/json]
+  note: getPublicObject additionally returns image bytes for assets/<hash>.<ext> keys.
+numeric_conventions:
+  big_integers_as_strings: true
+  note: >-
+    Prices and volumes are integer strings scaled by 1e18 (priceX18, pattern ^[0-9]+$)
+    to avoid IEEE-754 loss. priceX18 = reserveQuote * 1e18 / reserveToken, computed
+    after each LaunchSucceeded or Swap event. Clients must use big-integer arithmetic.
+address_conventions:
+  pattern: '^0x[a-fA-F0-9]{40}$'
+  case: >-
+    Path parameters accept mixed case; the indexer's own sync rows return lowercased
+    addresses while /api/config returns checksummed. Compare case-insensitively.
+semantic_boundaries:
+  financial_truth: >-
+    BNB Smart Chain contract state and matching event history. The Worker and its D1
+    database are rebuildable discovery caches and must not be used as financial truth.
+  not_an_oracle: getRugMarket is event-derived and is explicitly not a price oracle.
+  absence_is_not_proof: >-
+    A missing cache record is not proof that a contract or event does not exist. A 404
+    from getRug means "not indexed", not "does not exist" — the error string says so.
+  rugged_is_a_state: >-
+    Rugged is a contract lifecycle state, not a scam verdict, safety label, refund
+    condition, or proof that related wallets stopped trading.
+  no_endorsement: >-
+    The provider states that publication of its integration package does not claim any
+    third-party integration, review, partnership, recommendation, or endorsement.
+event_surface:
+  webhooks: false
+  streaming: false
+  asyncapi: false
+  note: >-
+    There is no webhook, SSE, or WebSocket surface. The nine domain events
+    (RugCreated, Contributed, LaunchSucceeded, LaunchFailed, ClaimedOpening,
+    ClaimedFailedRefund, CreatorStakeWithdrawn, Swap, RugPulled) are emitted by BSC
+    contracts and are read either from the chain directly or by polling
+    listRugEvents. No AsyncAPI artifact is emitted because no API-level event
+    surface exists to describe.
+cross_links:
+  authentication: authentication/rugspull-read-api-authentication.yml
+  errors: errors/rugspull-read-api-problem-types.yml
+  lifecycle: lifecycle/rugspull-read-api-lifecycle.yml
+  rate_limits: rate-limits/rugspull-read-api-rate-limits.yml
+  data_model: data-model/rugspull-read-api-data-model.yml

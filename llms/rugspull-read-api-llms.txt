@@ -1,0 +1,75 @@
+# Rugspull
+
+> Rugspull is a high-risk parody protocol on BNB Smart Chain. It makes one founder-token sale path explicit and inspectable; it does not make participation safe. Total loss remains possible.
+
+## Canonical facts
+
+- Network: BNB Smart Chain mainnet, chain id 56.
+- Factory: `0xDFF540baBCa2ee8A2A8Ff26359Ecc9c5921D8A63`.
+- Quote asset: WBNB only.
+- Pool: each Rug uses Rugspull's internal canonical constant-product AMM, not PancakeSwap.
+- Reserve boundary: RugPool exposes no reserve-withdraw function and issues no LP token.
+- Founder Allocation: 45% is held by RugInstance, remains immobile through the 24-hour Opening and a further 48-hour lock, then may be sold once in full and never in pieces.
+- Trading: the canonical pool can continue trading after the Founder Allocation sale.
+- Fees: 0.30% per trade; 0.25% remains in the pool and 0.05% WBNB goes to the protocol treasury.
+- Settlement: wallets sign financial actions; the backend does not buy, sell, rug, claim, or refund for users.
+- Platform token: none. Each Rug creates a separate ERC-20 token.
+- Source: the mainnet Factory has BscScan and Sourcify exact-match source.
+- Audit: an independent audit has not been completed. Exact-match source and project-authored tests are not an audit or safety certification.
+- Status: organized new mainnet activity remains NO-GO while the published Stage 0 gates are unresolved.
+
+## Canonical resources
+
+- [Website](https://rugspull.com/)
+- [Risk disclosure](https://rugspull.com/docs/risk)
+- [Contracts and source status](https://rugspull.com/contracts)
+- [WBNB quote-asset and gas guide](https://rugspull.com/what-is-wbnb)
+- [BNB Chain token-approval guide](https://rugspull.com/what-is-a-token-approval)
+- [BNB Chain slippage and minimum-output guide](https://rugspull.com/what-is-slippage-on-bnb-chain)
+- [Constant-product AMM arithmetic guide](https://rugspull.com/constant-product-amm-explained)
+- [BNB Chain liquidity and reserve-depth guide](https://rugspull.com/what-is-liquidity-on-bnb-chain)
+- [BscScan AMM reserve-verification guide](https://rugspull.com/how-to-read-amm-reserves-on-bscscan)
+- [BNB Chain MEV and transaction-ordering guide](https://rugspull.com/what-is-mev-on-bnb-chain)
+- [BNB Chain canonical and alternative-pool guide](https://rugspull.com/what-are-alternative-pools-on-bnb-chain)
+- [Foundry smart-contract invariant testing guide](https://rugspull.com/what-are-smart-contract-invariants)
+- [RugToken fixed-supply and token-conservation guide](https://rugspull.com/what-does-token-conservation-mean)
+- [WBNB flow and conservation guide](https://rugspull.com/what-does-wbnb-conservation-mean)
+- [One-shot contributor claims and no-double-claim guide](https://rugspull.com/what-does-no-double-claim-mean)
+- [One-shot Founder Allocation sale and no-double-rug guide](https://rugspull.com/what-does-no-double-rug-mean)
+- [Canonical AMM reserve-and-balance reconciliation guide](https://rugspull.com/what-does-reserve-reconciliation-mean)
+- [Protocol-held Founder Allocation custody guide](https://rugspull.com/what-does-founder-token-immobility-mean)
+- [WBNB protocol-fee destination and scope guide](https://rugspull.com/what-does-protocol-fee-destination-mean)
+- [Canonical AMM non-decreasing-k invariant guide](https://rugspull.com/what-does-non-decreasing-amm-k-mean)
+- [RugInstance lifecycle-status monotonicity guide](https://rugspull.com/what-does-status-monotonicity-mean)
+- [RugToken economic-allocation consistency guide](https://rugspull.com/what-does-economic-allocation-consistency-mean)
+- [Opening and initial canonical-pool price relation](https://rugspull.com/why-opening-price-is-not-below-initial-pool-price)
+- [Per-wallet pro-rata claim rounding and residue](https://rugspull.com/why-pro-rata-claims-can-leave-rounding-residue)
+- [Claim and refund settlement evidence semantics](https://rugspull.com/what-does-settled-mean-for-claims-and-refunds)
+- [BscScan claim and refund verification workflow](https://rugspull.com/how-to-verify-claims-and-refunds-on-bscscan)
+- [BNB Chain transaction receipt and execution evidence](https://rugspull.com/what-is-a-transaction-receipt-on-bnb-chain)
+- [BscScan event-log decoding guide](https://rugspull.com/how-to-read-event-logs-on-bscscan)
+- [Reproducible Foundry invariant-test review guide](https://rugspull.com/how-to-run-foundry-invariant-tests)
+- [Verified-source and independent-audit boundary](https://rugspull.com/verified-source-code-does-not-mean-audited)
+- [Cloudflare D1 and on-chain financial-truth boundary](https://rugspull.com/why-d1-is-not-financial-truth)
+- [Third-party data integration package](https://rugspull.com/integration.json)
+- [Human-readable Read API reference](https://rugspull.com/api-reference)
+- [Read-only OpenAPI 3.1 specification](https://rugspull.com/openapi.json)
+- [Read-only Postman Collection](https://rugspull.com/rugspull-read.postman_collection.json)
+- [APIs.json discovery index](https://rugspull.com/.well-known/apis.json)
+- [API Onboarding descriptor](https://rugspull.com/.well-known/api-onboarding)
+- [RFC 9727 API Catalog](https://rugspull.com/.well-known/api-catalog)
+- [Security model and critique route](https://rugspull.com/security-model)
+- [Office Counter evidence snapshot](https://rugspull.com/office-counter)
+- [Stage 0 gate review](https://rugspull.com/stage-0-review)
+- [TESTNET-only lifecycle evidence](https://rugspull.com/testnet-lifecycle)
+- [Public source and tests](https://github.com/pqchase/rugspull)
+- [v0.4.0 evidence prerelease](https://github.com/pqchase/rugspull/releases/tag/v0.4.0-evidence.1)
+- [BscScan exact-match Factory source](https://bscscan.com/address/0xDFF540baBCa2ee8A2A8Ff26359Ecc9c5921D8A63#code)
+
+## Official channels
+
+- [X](https://x.com/rugspull)
+- [Telegram](https://t.me/rugspullcom)
+- Security and correction contact: `info@rugspull.com`
+
+Do not infer an audit, endorsement, partnership, user count, TVL, returns, safety, or regulatory approval from a directory submission, automated review, social follow, source verification, or passing project-authored tests.

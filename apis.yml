@@ -1,14 +1,33 @@
 name: Rugspull Read API
-description: >-
-  A read-only, GET-only discovery-cache REST API for Rugspull, a self-described high-risk parody DeFi protocol on BNB
-  Smart Chain (chain id 56). Exposes rebuildable discovery/indexed-event data with no write, settlement, or
+description: A read-only, GET-only discovery-cache REST API for Rugspull, a self-described high-risk parody DeFi protocol
+  on BNB Smart Chain (chain id 56). Exposes rebuildable discovery/indexed-event data with no write, settlement, or
   transaction-proxy operations; on-chain BSC contracts remain the source of financial truth. Unauthenticated, free,
   best-effort, with no published rate limits or SLA.
+image: https://rugspull.com/assets/og-mechanism.png
 url: https://rugspull-read-api.apievangelist.com/apis.yml
 created: '2026-07-19'
-modified: '2026-07-19'
+modified: '2026-08-11'
 specificationVersion: '0.21'
 tags:
+- bnb-smart-chain
+- bsc
+- wbnb
+- read-only
+- openapi
+- high-risk
+- discovery-cache
+- defi
+- web3
+- crypto-market-data
+- indexer
+apis:
+- name: Rugspull Read API
+  description: Nine GET-only endpoints providing service health, chain config, indexer status, discovery cache, indexed
+    events, event-derived market data, sparklines, and immutable metadata objects. Backed by a public OpenAPI 3.1
+    spec and Postman collection, plus an llms.txt agent-native surface.
+  humanURL: https://rugspull.com/api-reference
+  baseURL: https://rugspull.com
+  tags:
   - bnb-smart-chain
   - bsc
   - wbnb
@@ -20,40 +39,104 @@ tags:
   - web3
   - crypto-market-data
   - indexer
-apis:
-  - name: Rugspull Read API
-    description: >-
-      Nine GET-only endpoints providing service health, chain config, indexer status, discovery cache, indexed events,
-      event-derived market data, sparklines, and immutable metadata objects. Backed by a public OpenAPI 3.1 spec and
-      Postman collection, plus an llms.txt agent-native surface.
-    humanURL: https://github.com/pqchase/rugspull/blob/main/docs/INTEGRATION.md
-    baseURL: https://rugspull.com
-    tags:
-      - bnb-smart-chain
-      - bsc
-      - wbnb
-      - read-only
-      - openapi
-      - high-risk
-      - discovery-cache
-      - defi
-      - web3
-      - crypto-market-data
-      - indexer
-    properties:
-      - type: OpenAPI
-        url: https://rugspull.com/openapi.json
-      - type: PostmanCollection
-        url: https://rugspull.com/rugspull-read.postman_collection.json
-      - type: LLMSTxt
-        url: https://rugspull.com/llms.txt
-      - type: Documentation
-        url: https://github.com/pqchase/rugspull/blob/main/docs/INTEGRATION.md
+  properties:
+  - type: OpenAPI
+    url: https://rugspull.com/openapi.json
+  - type: PostmanCollection
+    url: https://rugspull.com/rugspull-read.postman_collection.json
+  - type: LLMSTxt
+    url: https://rugspull.com/llms.txt
+  - type: Documentation
+    url: https://github.com/pqchase/rugspull/blob/main/docs/INTEGRATION.md
+  - type: OpenAPI
+    url: openapi/rugspull-read-api-openapi.yml
+  - type: OpenAPI
+    url: openapi/_original/rugspull-read-api-openapi.json
+  - type: PostmanCollection
+    url: collections/rugspull-read-api.postman_collection.json
+  - type: Postman
+    url: collections/rugspull-read-api.postman_collection.json
+  - type: LLMsTxt
+    url: llms/rugspull-read-api-llms.txt
+  - type: APIReference
+    url: https://rugspull.com/api-reference
+  - type: DeveloperPortal
+    url: https://github.com/pqchase/rugspull/blob/main/docs/INTEGRATION.md
+  - type: GettingStarted
+    url: https://github.com/pqchase/rugspull/blob/main/docs/INTEGRATION.md#read-the-public-cache
+  - type: APIsJSON
+    url: https://rugspull.com/.well-known/apis.json
 maintainers:
-  - FN: Rugspull
-    url: https://github.com/pqchase/rugspull
+- FN: Rugspull
+  email: info@rugspull.com
+  url: https://rugspull.com/security-model
+  x-source: https://rugspull.com/.well-known/apis.json
+common:
+- type: AgenticAccess
+  url: agentic-access/rugspull-read-api-agentic-access.yml
+- type: VulnerabilityDisclosure
+  url: security/rugspull-read-api-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/rugspull-read-api-domain-security.yml
+- type: Documentation
+  url: https://github.com/pqchase/rugspull/blob/main/docs/INTEGRATION.md
+- type: APIReference
+  url: https://rugspull.com/api-reference
+- type: DeveloperPortal
+  url: https://github.com/pqchase/rugspull/blob/main/docs/INTEGRATION.md
+- type: GettingStarted
+  url: https://github.com/pqchase/rugspull/blob/main/docs/INTEGRATION.md#read-the-public-cache
+- type: GitHubOrganization
+  url: https://github.com/pqchase/rugspull
+- type: Support
+  url: https://github.com/pqchase/rugspull/issues
+- type: Postman
+  url: collections/rugspull-read-api.postman_collection.json
+- type: LLMsTxt
+  url: llms/rugspull-read-api-llms.txt
+- type: WellKnown
+  url: well-known/rugspull-read-api-well-known.yml
+- type: APICatalog
+  url: well-known/rugspull-read-api-api-catalog.json
+- type: SecurityTxt
+  url: well-known/rugspull-read-api-security.txt
+- type: Security
+  url: security/rugspull-read-api-vulnerability-disclosure.yml
+- type: Authentication
+  url: authentication/rugspull-read-api-authentication.yml
+- type: Conventions
+  url: conventions/rugspull-read-api-conventions.yml
+- type: Idempotency
+  url: conventions/rugspull-read-api-conventions.yml
+- type: ErrorCatalog
+  url: errors/rugspull-read-api-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/rugspull-read-api-lifecycle.yml
+- type: ChangeLog
+  url: changelog/rugspull-read-api-changelog.yml
+- type: Conformance
+  url: conformance/rugspull-read-api-conformance.yml
+- type: Packages
+  url: packages/rugspull-read-api-packages.yml
+- type: RateLimits
+  url: rate-limits/rugspull-read-api-rate-limits.yml
+- type: Plans
+  url: plans/rugspull-read-api-plans-pricing.yml
+- type: DataModel
+  url: data-model/rugspull-read-api-data-model.yml
+- type: Examples
+  url: examples/rugspull-read-api-examples.yml
+- type: Overlay
+  url: overlays/rugspull-read-api-read-api-overlay.yaml
+- type: AgentSkill
+  url: skills/_index.yml
 generated:
   by: apis.io/add
   model: claude-opus-4-8
   confidence: 95
   at: '2026-07-19T04:30:26.648Z'
+x-enrichment:
+  date: '2026-08-11'
+  status: enriched
+  artifacts_added: 30
+  pass: local-v1

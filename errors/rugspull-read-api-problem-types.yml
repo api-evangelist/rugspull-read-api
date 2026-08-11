@@ -1,0 +1,105 @@
+generated: '2026-08-11'
+method: derived
+format: flat-json-error-string
+source: >-
+  Derived from the 4xx/5xx responses declared in openapi/rugspull-read-api-openapi.yml
+  (OpenAPI 3.1.0, nine operations) and confirmed against live unauthenticated
+  responses probed 2026-08-11.
+rfc9457: false
+envelope:
+  media_type: application/json
+  schema: Error
+  shape: '{ "error": string }'
+  required: [error]
+  note: >-
+    A single free-text field. There is no machine-readable error code, no type URI,
+    no title/detail/instance split, and no per-error documentation anchor. An agent
+    can branch on the HTTP status but must string-match to distinguish two errors that
+    share a status. Migrating to application/problem+json (RFC 9457) with a stable
+    `type` per condition is the single highest-value change available in this file.
+status_codes_declared: [200, 400, 404, 503]
+problems:
+  - status: 400
+    title: Invalid request parameter
+    media_type: application/json
+    schema: Error
+    declared_on: [listRugs, listMarketSparklines]
+    meaning: >-
+      A query parameter fell outside its declared bounds or failed validation — an
+      out-of-range limit or cursor on listRugs, or a malformed/over-length rugs list
+      on listMarketSparklines (maximum 24 unique valid EVM addresses).
+    remediation: >-
+      Clamp limit to its per-operation range (listRugs 1-100, getRugMarket 20-500),
+      keep cursor within 0-1000000, and send at most 24 comma-separated addresses
+      matching ^0x[a-fA-F0-9]{40}$.
+    observed: true
+    observed_example: '{"error":"Invalid R2 object key"}'
+    observed_on: 'GET /api/r2/metadata/deadbeef.json -> 400'
+  - status: 404
+    title: Not indexed
+    media_type: application/json
+    schema: Error
+    declared_on: [getRug, getPublicObject]
+    meaning: >-
+      The requested Rug address or object key is not present in the discovery cache.
+      This is a statement about the CACHE, not about the chain — the provider is
+      explicit that a missing cache record is not proof that a contract or event does
+      not exist.
+    remediation: >-
+      Confirm the address was emitted by the configured Factory (see getConfig), check
+      indexer freshness with getIndexerStatus, and fall back to reading BNB Smart Chain
+      state directly before reporting the entity as nonexistent.
+    observed: true
+    observed_example: '{"error":"Rug not indexed"}'
+    observed_on: 'GET /api/rugs/56/0x0000000000000000000000000000000000000001 -> 404'
+  - status: 503
+    title: Discovery cache unavailable
+    media_type: application/json
+    schema: Error
+    declared_on: [listRugs]
+    meaning: >-
+      The backing D1 discovery cache could not serve the listing. Declared on listRugs
+      only; the provider offers no uptime SLA, so this is an expected condition rather
+      than an incident signal.
+    remediation: >-
+      Retry with exponential backoff (the operation is a safe, idempotent GET) and
+      degrade to direct chain reads. Do not treat a 503 as evidence about protocol or
+      contract state.
+    observed: false
+    observed_note: Not reproduced during probing; the cache answered 200 on every attempt.
+undeclared_behaviour:
+  - operation: getPublicObject
+    path: /api/r2/{key}
+    finding: >-
+      Live 400 with {"error":"Invalid R2 object key"} for a key that fails the
+      public-key policy, but the operation declares only 200 and 404. The 400 is
+      real and reachable; the contract does not admit it.
+    impact: >-
+      A generated client that validates responses against the spec will treat a
+      legitimate policy rejection as a protocol violation.
+    recommendation: Add a 400 -> components/responses/Error to getPublicObject.
+  - operation: all
+    finding: >-
+      No 429 is declared or returned anywhere, consistent with the absence of a
+      published rate limit. An agent has no throttling status to handle.
+    impact: Backpressure is invisible until a request simply fails or hangs.
+    recommendation: See rate-limits/rugspull-read-api-rate-limits.yml.
+  - operation: [listRugEvents, getRugMarket]
+    finding: >-
+      Declare a 200 only. A bad chainId or malformed rug address on these paths has no
+      declared error response even though the path parameters carry a pattern and a
+      minimum.
+    impact: Validation failures are undocumented for two of the nine operations.
+    recommendation: Reference the shared Error response for 400/404 on both.
+warnings_channel:
+  operation: getIndexerStatus
+  field: warnings[]
+  note: >-
+    Soft failures are surfaced out-of-band as a string array on the indexer status
+    document rather than as errors. The provider states that an empty warnings array
+    does not create an SLA and does not prove complete history. Agents polling this
+    API should read warnings and staleBlockThreshold before trusting any market or
+    event response.
+cross_links:
+  conventions: conventions/rugspull-read-api-conventions.yml
+  examples: examples/rugspull-read-api-examples.yml
