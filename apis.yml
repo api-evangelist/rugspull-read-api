@@ -4,7 +4,7 @@ description: A read-only, GET-only discovery-cache REST API for Rugspull, a self
   transaction-proxy operations; on-chain BSC contracts remain the source of financial truth. Unauthenticated, free,
   best-effort, with no published rate limits or SLA.
 image: https://rugspull.com/assets/og-mechanism.png
-url: https://rugspull-read-api.apievangelist.com/apis.yml
+url: https://raw.githubusercontent.com/api-evangelist/rugspull-read-api/refs/heads/main/apis.yml
 created: '2026-07-19'
 modified: '2026-08-11'
 specificationVersion: '0.21'
