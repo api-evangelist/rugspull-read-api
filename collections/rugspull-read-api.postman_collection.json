@@ -1,71 +1,1125 @@
 {
-  "info": {
-    "name": "Rugspull Read API",
-    "description": "Nine read-only requests for Rugspull's rebuildable discovery cache on BNB Smart Chain. BSC contracts and matching event history remain financial truth. This collection contains no buy, sell, rug, claim, refund, upload, registration, indexer-run, or other write request. Independent audit is pending, total loss remains possible, no numeric rate-limit or uptime SLA is offered, and organized new mainnet activity remains NO-GO.",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-  },
-  "variable": [
-    { "key": "baseUrl", "value": "https://rugspull.com", "type": "string" },
-    { "key": "chainId", "value": "56", "type": "string" },
-    { "key": "rugAddress", "value": "0x0000000000000000000000000000000000000000", "type": "string", "description": "Replace with an Instance address actually emitted by the configured Factory. The zero address is only a non-secret placeholder." },
-    { "key": "r2Key", "value": "metadata/0x0000000000000000000000000000000000000000000000000000000000000000.json", "type": "string", "description": "Replace with a public immutable key returned by Rugspull metadata publication." }
-  ],
   "item": [
     {
+      "id": "5fbf52af-d169-4705-b433-c01a54d86841",
       "name": "Service",
+      "description": {
+        "content": "Liveness and public configuration.",
+        "type": "text/plain"
+      },
       "item": [
         {
-          "name": "Health",
-          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/health", "description": "Process liveness only; not chain, RPC, indexer, or financial-state health." }
+          "id": "dbfc0445-91f1-447e-960c-1150c17a5e1c",
+          "name": "Read service liveness",
+          "request": {
+            "name": "Read service liveness",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "health"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c065e48d-6940-4285-94ef-13e82cd92bcc",
+              "name": "Service process is responding; this is not chain, indexer, RPC, or financial-state health.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "health"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": {},\n  \"service\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
         },
         {
-          "name": "Public config",
-          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/config", "description": "Current chain, Factory sources, financial-truth boundary, and upload-protection state." }
-        },
-        {
-          "name": "Indexer status",
-          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/indexer/status", "description": "Read checkpoints, latest block observation, stale threshold, and warnings. Empty warnings do not create an SLA." }
+          "id": "212ae396-3054-4783-9d8b-0e2e93dca1f2",
+          "name": "Read public chain and Factory configuration",
+          "request": {
+            "name": "Read public chain and Factory configuration",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "config"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ef4b0724-b81e-4557-9b9c-217a920af1a9",
+              "name": "Public runtime configuration.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "config"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"chainId\": 4973,\n  \"factory\": \"string\",\n  \"factories\": [\n    \"string\",\n    \"string\"\n  ],\n  \"financialTruth\": {},\n  \"uploadsProtected\": false,\n  \"uploadsEnabled\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
         }
-      ]
+      ],
+      "event": []
     },
     {
+      "id": "05bc47d2-9f7e-4f69-beff-20be0fa449c4",
+      "name": "Indexer",
+      "description": {
+        "content": "Read-only indexer checkpoints and warnings.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "82b7cbf1-e51c-4608-a2a5-fe027d47c475",
+          "name": "Read checkpoints, latest block observation, stale threshold, and warnings",
+          "request": {
+            "name": "Read checkpoints, latest block observation, stale threshold, and warnings",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "indexer",
+                "status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "203a5ecb-7f19-42d6-8852-63dc73e63110",
+              "name": "Indexer status observation. Empty warnings do not create an SLA or prove complete history.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "indexer",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"chainId\": 3781,\n  \"latestBlock\": 2449,\n  \"factories\": [\n    {\n      \"key_0\": true,\n      \"key_1\": 8050.433588378666,\n      \"key_2\": 9221.052233743436\n    },\n    {\n      \"key_0\": true\n    }\n  ],\n  \"staleBlockThreshold\": 3879,\n  \"sync\": [\n    {\n      \"key_0\": 9429\n    },\n    {\n      \"key_0\": \"string\"\n    }\n  ],\n  \"warnings\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "2bc508d7-5cad-468c-b126-8af86777f189",
       "name": "Rugs",
+      "description": {
+        "content": "Current-Factory discovery cache and indexed event records.",
+        "type": "text/plain"
+      },
       "item": [
         {
-          "name": "List current-Factory Rugs",
-          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/rugs?limit=25&cursor=0", "description": "List cached current-Factory records. Optional status values are Opening, Failed, Active, and Rugged." }
+          "id": "0ff6e473-a93d-4893-a53e-25de7ca4dd34",
+          "name": "List current-Factory cached Rugs",
+          "request": {
+            "name": "List current-Factory cached Rugs",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "rugs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "0"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "25"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "dcbe0592-5260-4c58-ada5-f2ce9f354722",
+              "name": "Cached Rug rows and next numeric cursor.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "rugs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "0"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"rugs\": [\n    {\n      \"key_0\": false,\n      \"key_1\": 17\n    },\n    {\n      \"key_0\": 1774.673288649249,\n      \"key_1\": \"string\",\n      \"key_2\": \"string\"\n    }\n  ],\n  \"nextCursor\": 7292\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "98d36dd9-6f8d-42b3-990f-e0ddee22aa58",
+              "name": "Request error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "rugs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "0"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c3081a4a-eaf3-445a-9129-726f99f78180",
+              "name": "Request error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "rugs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "0"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
         },
         {
-          "name": "Read one Rug",
-          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/rugs/{{chainId}}/{{rugAddress}}", "description": "Read one indexed Instance record. A missing cache row does not prove that a chain deployment does not exist." }
+          "id": "3b577ff0-96bd-4ede-8592-d3e471beee5a",
+          "name": "Read one indexed Rug record",
+          "request": {
+            "name": "Read one indexed Rug record",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "rugs",
+                ":chainId",
+                ":rug"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "chainId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "rug",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "cd00dd08-67a0-44ab-b10a-fe1bc4ae977e",
+              "name": "Cached Rug record.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "rugs",
+                    ":chainId",
+                    ":rug"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "chainId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rug",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"rug\": {\n    \"key_0\": 616.8083527282042\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "97c8808c-3ebd-4dfa-b491-75861ed9ced6",
+              "name": "Request error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "rugs",
+                    ":chainId",
+                    ":rug"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "chainId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rug",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
         },
         {
-          "name": "Read Rug events",
-          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/rugs/{{chainId}}/{{rugAddress}}/events", "description": "Read up to 100 cached events ordered by block number and log index." }
+          "id": "75a41e33-bc67-4bc6-bb9c-be9b25bbdc2c",
+          "name": "Read up to 100 ordered cached events for one Rug",
+          "request": {
+            "name": "Read up to 100 ordered cached events for one Rug",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "rugs",
+                ":chainId",
+                ":rug",
+                "events"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "chainId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "rug",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b876d640-8722-4060-996d-1741e8631638",
+              "name": "Events ordered by block number and log index.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "rugs",
+                    ":chainId",
+                    ":rug",
+                    "events"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "chainId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rug",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"events\": [\n    {\n      \"key_0\": 5302,\n      \"key_1\": 9491.950926652326\n    },\n    {\n      \"key_0\": false,\n      \"key_1\": 9484\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
         }
-      ]
+      ],
+      "event": []
     },
     {
+      "id": "7cfe96b1-86b3-4fe3-a3be-e7bc977316ea",
       "name": "Market",
+      "description": {
+        "content": "Event-derived market points and sparklines; not a price oracle.",
+        "type": "text/plain"
+      },
       "item": [
         {
-          "name": "Read Rug market series",
-          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/rugs/{{chainId}}/{{rugAddress}}/market?limit=240", "description": "Event-derived points, marker, and cached aggregates. Not a price oracle; reconcile reserves and balances directly." }
+          "id": "ee357b8b-1a9b-4562-83f7-31d3d5fd0ccd",
+          "name": "Read event-derived market points, Rug marker, and cached aggregates",
+          "request": {
+            "name": "Read event-derived market points, Rug marker, and cached aggregates",
+            "description": {
+              "content": "Prices use integer reserveQuote * 1e18 / reserveToken after LaunchSucceeded or Swap. This endpoint is not an oracle and must not replace direct reserve reconciliation.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "rugs",
+                ":chainId",
+                ":rug",
+                "market"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "240"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "chainId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "rug",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ec0dbeb8-d5a6-467c-9891-ece9903f0c92",
+              "name": "Event-derived market series.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "rugs",
+                    ":chainId",
+                    ":rug",
+                    "market"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "240"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "chainId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "rug",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"chainId\": 4787,\n  \"rug\": \"string\",\n  \"source\": {},\n  \"points\": [\n    {\n      \"key_0\": true\n    },\n    {\n      \"key_0\": \"string\",\n      \"key_1\": true,\n      \"key_2\": 7710\n    }\n  ],\n  \"markers\": [\n    {\n      \"key_0\": 2035.0576824664236,\n      \"key_1\": 4044,\n      \"key_2\": 9592.591218407959\n    },\n    {\n      \"key_0\": \"string\"\n    }\n  ],\n  \"stats\": {\n    \"key_0\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
         },
         {
-          "name": "Read market sparklines",
-          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/market/sparklines?chainId={{chainId}}&rugs={{rugAddress}}", "description": "Read up to 16 recent integer priceX18 values for up to 24 valid Rug addresses." }
+          "id": "dbf816eb-16ed-419e-9dd7-d9f113f96838",
+          "name": "Read up to 16 recent integer prices for up to 24 Rug addresses",
+          "request": {
+            "name": "Read up to 16 recent integer prices for up to 24 Rug addresses",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "market",
+                "sparklines"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "chainId",
+                  "value": "56"
+                },
+                {
+                  "disabled": false,
+                  "key": "rugs",
+                  "value": "<string>",
+                  "description": "Comma-separated EVM addresses; maximum 24 unique valid addresses."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9becdb70-46ea-4ef7-bc77-d7f74e0e41f4",
+              "name": "Address-keyed arrays of integer priceX18 strings.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "market",
+                    "sparklines"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "chainId",
+                      "value": "56"
+                    },
+                    {
+                      "key": "rugs",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"chainId\": 9770,\n  \"sparklines\": {\n    \"key_0\": [\n      \"873\",\n      \"2477243\"\n    ],\n    \"key_1\": [\n      \"0227\",\n      \"236656\"\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e0b1947b-76f8-46f4-8ed2-419d6ad52a05",
+              "name": "Request error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "market",
+                    "sparklines"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "chainId",
+                      "value": "56"
+                    },
+                    {
+                      "key": "rugs",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
         }
-      ]
+      ],
+      "event": []
     },
     {
+      "id": "4f1385f1-a97d-490f-9fa6-87ab7f4c1d69",
       "name": "Objects",
+      "description": {
+        "content": "Public immutable metadata and image objects.",
+        "type": "text/plain"
+      },
       "item": [
         {
-          "name": "Read public immutable object",
-          "request": { "method": "GET", "header": [], "url": "{{baseUrl}}/api/r2/{{r2Key}}", "description": "Read an allowed immutable metadata JSON or image object. Replace the placeholder key with a real public key." }
+          "id": "ab8b6866-f258-4244-9296-0df3aaa7e30b",
+          "name": "Read one public immutable metadata or image object",
+          "request": {
+            "name": "Read one public immutable metadata or image object",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "r2",
+                ":key"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "key",
+                  "description": "(Required) Allowed metadata/<hash>.json or assets/<hash>.<image-extension> key."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6aaab9e7-e198-4483-8925-c6350144f973",
+              "name": "Immutable JSON metadata or supported image bytes.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "r2",
+                    ":key"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "key",
+                      "description": "(Required) Allowed metadata/<hash>.json or assets/<hash>.<image-extension> key."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5d2d461d-87b7-4322-8241-691946102bfa",
+              "name": "Request error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "r2",
+                    ":key"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "key",
+                      "description": "(Required) Allowed metadata/<hash>.json or assets/<hash>.<image-extension> key."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
         }
-      ]
+      ],
+      "event": []
     }
-  ]
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://rugspull.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "80d316f3-18df-4ba5-8ed9-fedeeeaa5e66",
+    "name": "Rugspull Read API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This API exposes rebuildable discovery and indexed-event data. BNB Smart Chain contracts and matching event history remain financial truth. The API does not buy, sell, rug, claim, refund, or sign transactions for users. No numeric rate-limit or uptime SLA is offered. Independent audit is pending, total loss remains possible, and this specification does not claim third-party integration, review, partnership, recommendation, or endorsement.\n\nContact Support:\n Name: Rugspull security and corrections\n Email: info@rugspull.com",
+      "type": "text/plain"
+    }
+  }
 }

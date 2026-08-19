@@ -1,0 +1,228 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rugspull Read API",
+    "version": "0.4.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Service",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Read service liveness",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://rugspull.com/api/health"
+          },
+          "docs": "Read service liveness"
+        },
+        {
+          "info": {
+            "name": "Read public chain and Factory configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://rugspull.com/api/config"
+          },
+          "docs": "Read public chain and Factory configuration"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Indexer",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Read checkpoints, latest block observation, stale threshold, and warnings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://rugspull.com/api/indexer/status"
+          },
+          "docs": "Read checkpoints, latest block observation, stale threshold, and warnings"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Rugs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List current-Factory cached Rugs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://rugspull.com/api/rugs",
+            "params": [
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "List current-Factory cached Rugs"
+        },
+        {
+          "info": {
+            "name": "Read one indexed Rug record",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://rugspull.com/api/rugs/:chainId/:rug",
+            "params": [
+              {
+                "name": "chainId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "rug",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Read one indexed Rug record"
+        },
+        {
+          "info": {
+            "name": "Read up to 100 ordered cached events for one Rug",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://rugspull.com/api/rugs/:chainId/:rug/events",
+            "params": [
+              {
+                "name": "chainId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "rug",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Read up to 100 ordered cached events for one Rug"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Market",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Read event-derived market points, Rug marker, and cached aggregates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://rugspull.com/api/rugs/:chainId/:rug/market",
+            "params": [
+              {
+                "name": "chainId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "rug",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Prices use integer reserveQuote * 1e18 / reserveToken after LaunchSucceeded or Swap. This endpoint is not an oracle and must not replace direct reserve reconciliation."
+        },
+        {
+          "info": {
+            "name": "Read up to 16 recent integer prices for up to 24 Rug addresses",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://rugspull.com/api/market/sparklines",
+            "params": [
+              {
+                "name": "chainId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "rugs",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated EVM addresses; maximum 24 unique valid addresses."
+              }
+            ]
+          },
+          "docs": "Read up to 16 recent integer prices for up to 24 Rug addresses"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Objects",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Read one public immutable metadata or image object",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://rugspull.com/api/r2/:key",
+            "params": [
+              {
+                "name": "key",
+                "value": "",
+                "type": "path",
+                "description": "Allowed metadata/<hash>.json or assets/<hash>.<image-extension> key."
+              }
+            ]
+          },
+          "docs": "Read one public immutable metadata or image object"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

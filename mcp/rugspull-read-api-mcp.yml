@@ -3,64 +3,106 @@ method: derived
 status: candidate
 published: false
 source: openapi/rugspull-read-api-openapi.yml
-search_result: >-
-  NO hosted or local MCP server exists. Searched every first-party surface the provider
-  publishes — apis.json, api-catalog, api-onboarding, integration.json, llms.txt,
-  INTEGRATION.md, the GitHub repository tree (179 paths) and its releases — and probed
-  https://rugspull.com/mcp and https://rugspull.com/.well-known/mcp.json, both of which
-  return the site's SPA HTML shell (200 text/html, 2458 bytes) rather than a document.
-  No npm package under @rugspull exists to run over stdio. The catalog's earlier note
-  that "no MCP server (hosted or local) was found in any provider source" is confirmed.
+search_result: NO hosted or local MCP server exists. Searched every first-party surface the provider publishes
+  — apis.json, api-catalog, api-onboarding, integration.json, llms.txt, INTEGRATION.md, the GitHub repository
+  tree (179 paths) and its releases — and probed https://rugspull.com/mcp and https://rugspull.com/.well-known/mcp.json,
+  both of which return the site's SPA HTML shell (200 text/html, 2458 bytes) rather than a document. No
+  npm package under @rugspull exists to run over stdio. The catalog's earlier note that "no MCP server
+  (hosted or local) was found in any provider source" is confirmed.
 probes:
-  - {url: 'https://rugspull.com/mcp', status: 200, content_type: text/html, result: soft-404}
-  - {url: 'https://rugspull.com/.well-known/mcp.json', status: 200, content_type: text/html, result: soft-404}
-  - {url: 'https://registry.npmjs.org/@rugspull%2Fapi', status: 404, result: 'no package'}
+- url: https://rugspull.com/mcp
+  status: 200
+  content_type: text/html
+  result: soft-404
+- url: https://rugspull.com/.well-known/mcp.json
+  status: 200
+  content_type: text/html
+  result: soft-404
+- url: https://registry.npmjs.org/@rugspull%2Fapi
+  status: 404
+  result: no package
 server: null
 candidate:
-  rationale: >-
-    Derived, NOT published. This is what an MCP server over this API would expose if the
-    provider or a third party built one — every tool is a direct projection of one
-    OpenAPI operation, and each inherits that operation's parameters verbatim as its
-    input schema. It is a design sketch for a build, not a claim that anything is
-    running. No MCPServer pointer is wired into apis.yml.
-  fit: >-
-    This API is an unusually good MCP candidate: nine operations, all GET, anonymous,
-    no pagination beyond one cursor, small JSON responses, and a published contract with
-    unique operationIds. There is no auth to negotiate and nothing an agent can break —
-    every call is safe and idempotent under RFC 9110.
+  rationale: Derived, NOT published. This is what an MCP server over this API would expose if the provider
+    or a third party built one — every tool is a direct projection of one OpenAPI operation, and each
+    inherits that operation's parameters verbatim as its input schema. It is a design sketch for a build,
+    not a claim that anything is running. No MCPServer pointer is wired into apis.yml.
+  fit: 'This API is an unusually good MCP candidate: nine operations, all GET, anonymous, no pagination
+    beyond one cursor, small JSON responses, and a published contract with unique operationIds. There
+    is no auth to negotiate and nothing an agent can break — every call is safe and idempotent under RFC
+    9110.'
   transport_suggested: http
   auth_required: none
   tool_count: 9
   tools:
-    - {name: get_health, operationId: getHealth, category: service, input_schema: 'none', description: 'Check that the Rugspull read service is responding. Not chain, indexer, RPC, or financial-state health.'}
-    - {name: get_config, operationId: getConfig, category: service, input_schema: 'none', description: 'Read chain id, the active Factory address, the historical factories list, and the financial-truth boundary.'}
-    - {name: get_indexer_status, operationId: getIndexerStatus, category: indexer, input_schema: 'none', description: 'Read indexer checkpoints, the observed chain head, the stale-block threshold, and warnings. Call this before trusting any cached data.'}
-    - {name: list_rugs, operationId: listRugs, category: discovery, input_schema: 'status (enum Opening|Failed|Active|Rugged, optional), cursor (integer 0-1000000, default 0), limit (integer 1-100, default 25)', description: 'List Rugs in the current-Factory discovery cache.'}
-    - {name: get_rug, operationId: getRug, category: discovery, input_schema: 'chainId (integer >=1, required), rug (string ^0x[a-fA-F0-9]{40}$, required)', description: 'Read one indexed Rug record. A 404 means not indexed, not nonexistent.'}
-    - {name: list_rug_events, operationId: listRugEvents, category: discovery, input_schema: 'chainId (integer >=1, required), rug (string ^0x[a-fA-F0-9]{40}$, required)', description: 'Read up to 100 ordered cached events for one Rug, sorted by block number then log index.'}
-    - {name: get_rug_market, operationId: getRugMarket, category: market, input_schema: 'chainId (integer >=1, required), rug (string ^0x[a-fA-F0-9]{40}$, required), limit (integer 20-500, default 240)', description: 'Read event-derived market points, the RugPulled marker, and cached aggregates. Not a price oracle.'}
-    - {name: list_market_sparklines, operationId: listMarketSparklines, category: market, input_schema: 'chainId (integer, default 56), rugs (comma-separated addresses, maximum 24 unique)', description: 'Read up to 16 recent integer prices for up to 24 Rug addresses.'}
-    - {name: get_public_object, operationId: getPublicObject, category: objects, input_schema: 'key (string, required; metadata/<hash>.json or assets/<hash>.<image-extension>)', description: 'Read one public immutable metadata or image object.'}
+  - name: get_health
+    operationId: getHealth
+    category: service
+    input_schema: none
+    description: Check that the Rugspull read service is responding. Not chain, indexer, RPC, or financial-state
+      health.
+  - name: get_config
+    operationId: getConfig
+    category: service
+    input_schema: none
+    description: Read chain id, the active Factory address, the historical factories list, and the financial-truth
+      boundary.
+  - name: get_indexer_status
+    operationId: getIndexerStatus
+    category: indexer
+    input_schema: none
+    description: Read indexer checkpoints, the observed chain head, the stale-block threshold, and warnings.
+      Call this before trusting any cached data.
+  - name: list_rugs
+    operationId: listRugs
+    category: discovery
+    input_schema: status (enum Opening|Failed|Active|Rugged, optional), cursor (integer 0-1000000, default
+      0), limit (integer 1-100, default 25)
+    description: List Rugs in the current-Factory discovery cache.
+  - name: get_rug
+    operationId: getRug
+    category: discovery
+    input_schema: chainId (integer >=1, required), rug (string ^0x[a-fA-F0-9]{40}$, required)
+    description: Read one indexed Rug record. A 404 means not indexed, not nonexistent.
+  - name: list_rug_events
+    operationId: listRugEvents
+    category: discovery
+    input_schema: chainId (integer >=1, required), rug (string ^0x[a-fA-F0-9]{40}$, required)
+    description: Read up to 100 ordered cached events for one Rug, sorted by block number then log index.
+  - name: get_rug_market
+    operationId: getRugMarket
+    category: market
+    input_schema: chainId (integer >=1, required), rug (string ^0x[a-fA-F0-9]{40}$, required), limit (integer
+      20-500, default 240)
+    description: Read event-derived market points, the RugPulled marker, and cached aggregates. Not a
+      price oracle.
+  - name: list_market_sparklines
+    operationId: listMarketSparklines
+    category: market
+    input_schema: chainId (integer, default 56), rugs (comma-separated addresses, maximum 24 unique)
+    description: Read up to 16 recent integer prices for up to 24 Rug addresses.
+  - name: get_public_object
+    operationId: getPublicObject
+    category: objects
+    input_schema: key (string, required; metadata/<hash>.json or assets/<hash>.<image-extension>)
+    description: Read one public immutable metadata or image object.
   agent_guardrails:
-    - Every tool is read-only and idempotent; retries are always safe.
-    - >-
-      Numeric prices and volumes are integer STRINGS scaled by 1e18. A tool wrapper must
-      not coerce them to floats.
-    - >-
-      A tool result is a cache read. BNB Smart Chain contract state is financial truth,
-      and an empty or missing result is not evidence that a contract or event does not
-      exist.
-    - >-
-      get_rug_market is not an oracle and offers no OHLCV. Do not present its output as
-      a price feed.
-    - >-
-      "Rugged" is a lifecycle state, not a scam verdict. An agent summarising this data
-      must not relabel it.
-  not_covered: >-
-    An MCP server over this API would be strictly weaker than the chain for anything
-    financial: there are no write, settlement, or transaction-proxy operations to expose,
-    by design.
+  - Every tool is read-only and idempotent; retries are always safe.
+  - Numeric prices and volumes are integer STRINGS scaled by 1e18. A tool wrapper must not coerce them
+    to floats.
+  - A tool result is a cache read. BNB Smart Chain contract state is financial truth, and an empty or
+    missing result is not evidence that a contract or event does not exist.
+  - get_rug_market is not an oracle and offers no OHLCV. Do not present its output as a price feed.
+  - '"Rugged" is a lifecycle state, not a scam verdict. An agent summarising this data must not relabel
+    it.'
+  not_covered: 'An MCP server over this API would be strictly weaker than the chain for anything financial:
+    there are no write, settlement, or transaction-proxy operations to expose, by design.'
 cross_links:
   openapi: openapi/rugspull-read-api-openapi.yml
   agentic_access: agentic-access/rugspull-read-api-agentic-access.yml
   skills: skills/_index.yml
+deployment:
+  mode: none
+  verified: derived
+  checked: '2026-08-12'
+  source: catalog MCP census
