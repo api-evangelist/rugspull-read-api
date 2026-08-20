@@ -9,6 +9,18 @@ created: '2026-07-19'
 modified: '2026-08-11'
 specificationVersion: '0.23'
 tags:
+- BNB Smart Chain
+- BSC
+- wbnb
+- Read Only
+- OpenAPI
+- high-risk
+- discovery-cache
+- DeFi
+- Web3
+- crypto-market-data
+- Indexer
+tags_raw:
 - bnb-smart-chain
 - bsc
 - wbnb
@@ -28,6 +40,18 @@ apis:
   humanURL: https://rugspull.com/api-reference
   baseURL: https://rugspull.com
   tags:
+  - BNB Smart Chain
+  - BSC
+  - wbnb
+  - Read Only
+  - OpenAPI
+  - high-risk
+  - discovery-cache
+  - DeFi
+  - Web3
+  - crypto-market-data
+  - Indexer
+  tags_raw:
   - bnb-smart-chain
   - bsc
   - wbnb
