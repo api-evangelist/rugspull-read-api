@@ -3,6 +3,18 @@ description: A read-only, GET-only discovery-cache REST API for Rugspull, a self
   on BNB Smart Chain (chain id 56). Exposes rebuildable discovery/indexed-event data with no write, settlement, or
   transaction-proxy operations; on-chain BSC contracts remain the source of financial truth. Unauthenticated, free,
   best-effort, with no published rate limits or SLA.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://rugspull.com/assets/og-mechanism.png
 url: https://raw.githubusercontent.com/api-evangelist/rugspull-read-api/refs/heads/main/apis.yml
 created: '2026-07-19'
