@@ -1,0 +1,81 @@
+openapi: 3.2.0
+info:
+  title: Rugspull Read Indexer API
+  version: 0.4.0
+  summary: Read-only discovery cache for Rugspull on BNB Smart Chain
+  description: This API exposes rebuildable discovery and indexed-event data. BNB Smart Chain contracts and matching event history remain financial truth. The API does not buy, sell, rug, claim, refund, or sign transactions for users. No numeric rate-limit or uptime SLA is offered. Independent audit is pending, total loss remains possible, and this specification does not claim third-party integration, review, partnership, recommendation, or endorsement.
+  contact:
+    name: Rugspull security and corrections
+    url: https://rugspull.com/security-model
+    email: info@rugspull.com
+servers:
+- url: https://rugspull.com
+tags:
+- name: Indexer
+  description: Read-only indexer checkpoints and warnings.
+paths:
+  /api/indexer/status:
+    get:
+      operationId: getIndexerStatus
+      tags:
+      - Indexer
+      summary: Read checkpoints, latest block observation, stale threshold, and warnings
+      responses:
+        '200':
+          description: Indexer status observation. Empty warnings do not create an SLA or prove complete history.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndexerStatus'
+components:
+  schemas:
+    IndexerStatus:
+      type: object
+      required:
+      - chainId
+      - latestBlock
+      - factories
+      - staleBlockThreshold
+      - sync
+      - warnings
+      properties:
+        chainId:
+          type: integer
+        latestBlock:
+          type:
+          - integer
+          - 'null'
+        factories:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        staleBlockThreshold:
+          type: integer
+        sync:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        warnings:
+          type: array
+          items:
+            type: string
+externalDocs:
+  description: Human-readable GET-only endpoint reference and trust boundaries
+  url: https://rugspull.com/api-reference
+x-rugspull-boundaries:
+  financialTruth: BNB Smart Chain contracts and matching event history
+  transactionExecution: false
+  numericRateLimitSla: false
+  uptimeSla: false
+  independentAuditCompleted: false
+  organizedMainnetPromotion: NO-GO
+  thirdPartyIntegrationClaimed: false
+x-rugspull-resources:
+  apiReference: https://rugspull.com/api-reference
+  humanGuide: https://github.com/pqchase/rugspull/blob/main/docs/INTEGRATION.md
+  postmanCollection: https://rugspull.com/rugspull-read.postman_collection.json
+  apisJson: https://rugspull.com/.well-known/apis.json
+  apiOnboarding: https://rugspull.com/.well-known/api-onboarding
+  apiCatalog: https://rugspull.com/.well-known/api-catalog

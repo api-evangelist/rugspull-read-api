@@ -1,0 +1,68 @@
+openapi: 3.2.0
+info:
+  title: Rugspull Read Objects API
+  version: 0.4.0
+  summary: Read-only discovery cache for Rugspull on BNB Smart Chain
+  description: This API exposes rebuildable discovery and indexed-event data. BNB Smart Chain contracts and matching event history remain financial truth. The API does not buy, sell, rug, claim, refund, or sign transactions for users. No numeric rate-limit or uptime SLA is offered. Independent audit is pending, total loss remains possible, and this specification does not claim third-party integration, review, partnership, recommendation, or endorsement.
+  contact:
+    name: Rugspull security and corrections
+    url: https://rugspull.com/security-model
+    email: info@rugspull.com
+servers:
+- url: https://rugspull.com
+tags:
+- name: Objects
+  description: Public immutable metadata and image objects.
+paths:
+  /api/r2/{key}:
+    get:
+      operationId: getPublicObject
+      tags:
+      - Objects
+      summary: Read one public immutable metadata or image object
+      parameters:
+      - name: key
+        in: path
+        required: true
+        description: Allowed metadata/<hash>.json or assets/<hash>.<image-extension> key.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Immutable JSON metadata or supported image bytes.
+        '404':
+          $ref: '#/components/responses/Error'
+components:
+  responses:
+    Error:
+      description: Request error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: string
+externalDocs:
+  description: Human-readable GET-only endpoint reference and trust boundaries
+  url: https://rugspull.com/api-reference
+x-rugspull-boundaries:
+  financialTruth: BNB Smart Chain contracts and matching event history
+  transactionExecution: false
+  numericRateLimitSla: false
+  uptimeSla: false
+  independentAuditCompleted: false
+  organizedMainnetPromotion: NO-GO
+  thirdPartyIntegrationClaimed: false
+x-rugspull-resources:
+  apiReference: https://rugspull.com/api-reference
+  humanGuide: https://github.com/pqchase/rugspull/blob/main/docs/INTEGRATION.md
+  postmanCollection: https://rugspull.com/rugspull-read.postman_collection.json
+  apisJson: https://rugspull.com/.well-known/apis.json
+  apiOnboarding: https://rugspull.com/.well-known/api-onboarding
+  apiCatalog: https://rugspull.com/.well-known/api-catalog

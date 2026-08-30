@@ -1,0 +1,98 @@
+openapi: 3.2.0
+info:
+  title: Rugspull Read Service API
+  version: 0.4.0
+  summary: Read-only discovery cache for Rugspull on BNB Smart Chain
+  description: This API exposes rebuildable discovery and indexed-event data. BNB Smart Chain contracts and matching event history remain financial truth. The API does not buy, sell, rug, claim, refund, or sign transactions for users. No numeric rate-limit or uptime SLA is offered. Independent audit is pending, total loss remains possible, and this specification does not claim third-party integration, review, partnership, recommendation, or endorsement.
+  contact:
+    name: Rugspull security and corrections
+    url: https://rugspull.com/security-model
+    email: info@rugspull.com
+servers:
+- url: https://rugspull.com
+tags:
+- name: Service
+  description: Liveness and public configuration.
+paths:
+  /api/health:
+    get:
+      operationId: getHealth
+      tags:
+      - Service
+      summary: Read service liveness
+      responses:
+        '200':
+          description: Service process is responding; this is not chain, indexer, RPC, or financial-state health.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+  /api/config:
+    get:
+      operationId: getConfig
+      tags:
+      - Service
+      summary: Read public chain and Factory configuration
+      responses:
+        '200':
+          description: Public runtime configuration.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Config'
+components:
+  schemas:
+    Config:
+      type: object
+      required:
+      - chainId
+      - factory
+      - factories
+      - financialTruth
+      - uploadsProtected
+      - uploadsEnabled
+      properties:
+        chainId:
+          type: integer
+        factory:
+          type:
+          - string
+          - 'null'
+        factories:
+          type: array
+          items:
+            type: string
+        financialTruth:
+          const: BSC contracts
+        uploadsProtected:
+          type: boolean
+        uploadsEnabled:
+          type: boolean
+    Health:
+      type: object
+      required:
+      - ok
+      - service
+      properties:
+        ok:
+          const: true
+        service:
+          const: rugspull-api
+externalDocs:
+  description: Human-readable GET-only endpoint reference and trust boundaries
+  url: https://rugspull.com/api-reference
+x-rugspull-boundaries:
+  financialTruth: BNB Smart Chain contracts and matching event history
+  transactionExecution: false
+  numericRateLimitSla: false
+  uptimeSla: false
+  independentAuditCompleted: false
+  organizedMainnetPromotion: NO-GO
+  thirdPartyIntegrationClaimed: false
+x-rugspull-resources:
+  apiReference: https://rugspull.com/api-reference
+  humanGuide: https://github.com/pqchase/rugspull/blob/main/docs/INTEGRATION.md
+  postmanCollection: https://rugspull.com/rugspull-read.postman_collection.json
+  apisJson: https://rugspull.com/.well-known/apis.json
+  apiOnboarding: https://rugspull.com/.well-known/api-onboarding
+  apiCatalog: https://rugspull.com/.well-known/api-catalog

@@ -1,0 +1,163 @@
+openapi: 3.2.0
+info:
+  title: Rugspull Read Market API
+  version: 0.4.0
+  summary: Read-only discovery cache for Rugspull on BNB Smart Chain
+  description: This API exposes rebuildable discovery and indexed-event data. BNB Smart Chain contracts and matching event history remain financial truth. The API does not buy, sell, rug, claim, refund, or sign transactions for users. No numeric rate-limit or uptime SLA is offered. Independent audit is pending, total loss remains possible, and this specification does not claim third-party integration, review, partnership, recommendation, or endorsement.
+  contact:
+    name: Rugspull security and corrections
+    url: https://rugspull.com/security-model
+    email: info@rugspull.com
+servers:
+- url: https://rugspull.com
+tags:
+- name: Market
+  description: Event-derived market points and sparklines; not a price oracle.
+paths:
+  /api/rugs/{chainId}/{rug}/market:
+    get:
+      operationId: getRugMarket
+      tags:
+      - Market
+      summary: Read event-derived market points, Rug marker, and cached aggregates
+      description: Prices use integer reserveQuote * 1e18 / reserveToken after LaunchSucceeded or Swap. This endpoint is not an oracle and must not replace direct reserve reconciliation.
+      parameters:
+      - $ref: '#/components/parameters/ChainId'
+      - $ref: '#/components/parameters/RugAddress'
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 20
+          maximum: 500
+          default: 240
+      responses:
+        '200':
+          description: Event-derived market series.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketSeries'
+  /api/market/sparklines:
+    get:
+      operationId: listMarketSparklines
+      tags:
+      - Market
+      summary: Read up to 16 recent integer prices for up to 24 Rug addresses
+      parameters:
+      - name: chainId
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 56
+      - name: rugs
+        in: query
+        required: false
+        description: Comma-separated EVM addresses; maximum 24 unique valid addresses.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Address-keyed arrays of integer priceX18 strings.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sparklines'
+        '400':
+          $ref: '#/components/responses/Error'
+components:
+  schemas:
+    MarketSeries:
+      type: object
+      required:
+      - chainId
+      - rug
+      - source
+      - points
+      - markers
+      - stats
+      properties:
+        chainId:
+          type: integer
+        rug:
+          type: string
+        source:
+          const: indexed BSC events
+        points:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        markers:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        stats:
+          type: object
+          additionalProperties: true
+    Sparklines:
+      type: object
+      required:
+      - chainId
+      - sparklines
+      properties:
+        chainId:
+          type: integer
+        sparklines:
+          type: object
+          additionalProperties:
+            type: array
+            maxItems: 16
+            items:
+              type: string
+              pattern: ^[0-9]+$
+    Error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: string
+  responses:
+    Error:
+      description: Request error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    ChainId:
+      name: chainId
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+    RugAddress:
+      name: rug
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: ^0x[a-fA-F0-9]{40}$
+externalDocs:
+  description: Human-readable GET-only endpoint reference and trust boundaries
+  url: https://rugspull.com/api-reference
+x-rugspull-boundaries:
+  financialTruth: BNB Smart Chain contracts and matching event history
+  transactionExecution: false
+  numericRateLimitSla: false
+  uptimeSla: false
+  independentAuditCompleted: false
+  organizedMainnetPromotion: NO-GO
+  thirdPartyIntegrationClaimed: false
+x-rugspull-resources:
+  apiReference: https://rugspull.com/api-reference
+  humanGuide: https://github.com/pqchase/rugspull/blob/main/docs/INTEGRATION.md
+  postmanCollection: https://rugspull.com/rugspull-read.postman_collection.json
+  apisJson: https://rugspull.com/.well-known/apis.json
+  apiOnboarding: https://rugspull.com/.well-known/api-onboarding
+  apiCatalog: https://rugspull.com/.well-known/api-catalog
