@@ -21,8 +21,8 @@ created: '2026-07-19'
 modified: '2026-08-11'
 specificationVersion: '0.23'
 tags:
-- bnb-smart-chain
-- bsc
+- BNB Smart Chain
+- BSC
 - wbnb
 - Read Only
 - OpenAPI
@@ -31,7 +31,7 @@ tags:
 - DeFi
 - Web3
 - crypto-market-data
-- indexer
+- Indexer
 tags_raw:
 - bnb-smart-chain
 - bsc
