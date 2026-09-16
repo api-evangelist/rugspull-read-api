@@ -1,8 +1,8 @@
 name: Rugspull Read API
-description: A read-only, GET-only discovery-cache REST API for Rugspull, a self-described high-risk parody DeFi protocol
-  on BNB Smart Chain (chain id 56). Exposes rebuildable discovery/indexed-event data with no write, settlement, or
-  transaction-proxy operations; on-chain BSC contracts remain the source of financial truth. Unauthenticated, free,
-  best-effort, with no published rate limits or SLA.
+description: A read-only, GET-only discovery-cache REST API for Rugspull, a self-described high-risk parody
+  DeFi protocol on BNB Smart Chain (chain id 56). Exposes rebuildable discovery/indexed-event data with
+  no write, settlement, or transaction-proxy operations; on-chain BSC contracts remain the source of financial
+  truth. Unauthenticated, free, best-effort, with no published rate limits or SLA.
 deliveryModel:
   model: saas
   open_source: false
@@ -32,7 +32,7 @@ accessModel:
 image: https://rugspull.com/assets/og-mechanism.png
 url: https://raw.githubusercontent.com/api-evangelist/rugspull-read-api/refs/heads/main/apis.yml
 created: '2026-07-19'
-modified: '2026-08-11'
+modified: '2026-09-16'
 specificationVersion: '0.23'
 tags:
 - BNB Smart Chain
@@ -215,6 +215,8 @@ maintainers:
   url: https://rugspull.com/security-model
   x-source: https://rugspull.com/.well-known/apis.json
 common:
+- type: Website
+  url: https://rugspull.com
 - type: AgenticAccess
   url: agentic-access/rugspull-read-api-agentic-access.yml
 - type: VulnerabilityDisclosure
