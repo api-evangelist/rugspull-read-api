@@ -95,6 +95,8 @@ apis:
   humanURL: https://rugspull.com/api-reference
   baseURL: https://rugspull.com
   tags:
+  - Markets
+  tags_raw:
   - Market
   properties:
   - type: OpenAPI
@@ -185,6 +187,8 @@ apis:
   humanURL: https://rugspull.com/api-reference
   baseURL: https://rugspull.com
   tags:
+  - Services
+  tags_raw:
   - Service
   properties:
   - type: OpenAPI
