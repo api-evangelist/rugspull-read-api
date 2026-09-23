@@ -1,0 +1,30 @@
+{
+  "provider": "rugspull-read-api",
+  "sources": [
+    "_original/rugspull-read-api-openapi.json"
+  ],
+  "outputs": [
+    "rugspull-read-api-indexer-api-openapi.yml",
+    "rugspull-read-api-market-api-openapi.yml",
+    "rugspull-read-api-objects-api-openapi.yml",
+    "rugspull-read-api-rugs-api-openapi.yml",
+    "rugspull-read-api-service-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "1 archived document(s) dropped as subsets of other archived documents",
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "rugspull-read-api-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "_original/rugspull-read-api-openapi.yml: archived document superseded by a larger archived document",
+    "rugspull-read-api-indexer-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "rugspull-read-api-market-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "rugspull-read-api-objects-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "rugspull-read-api-rugs-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "rugspull-read-api-service-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}

@@ -68,6 +68,28 @@ paths:
         '400':
           $ref: '#/components/responses/Error'
 components:
+  responses:
+    Error:
+      description: Request error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    ChainId:
+      name: chainId
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+    RugAddress:
+      name: rug
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: ^0x[a-fA-F0-9]{40}$
   schemas:
     MarketSeries:
       type: object
@@ -98,6 +120,13 @@ components:
         stats:
           type: object
           additionalProperties: true
+    Error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: string
     Sparklines:
       type: object
       required:
@@ -114,35 +143,6 @@ components:
             items:
               type: string
               pattern: ^[0-9]+$
-    Error:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          type: string
-  responses:
-    Error:
-      description: Request error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-  parameters:
-    ChainId:
-      name: chainId
-      in: path
-      required: true
-      schema:
-        type: integer
-        minimum: 1
-    RugAddress:
-      name: rug
-      in: path
-      required: true
-      schema:
-        type: string
-        pattern: ^0x[a-fA-F0-9]{40}$
 externalDocs:
   description: Human-readable GET-only endpoint reference and trust boundaries
   url: https://rugspull.com/api-reference
