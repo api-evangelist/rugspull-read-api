@@ -108,6 +108,21 @@ paths:
                       type: object
                       additionalProperties: true
 components:
+  parameters:
+    ChainId:
+      name: chainId
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+    RugAddress:
+      name: rug
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: ^0x[a-fA-F0-9]{40}$
   schemas:
     RugList:
       type: object
@@ -136,21 +151,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  parameters:
-    ChainId:
-      name: chainId
-      in: path
-      required: true
-      schema:
-        type: integer
-        minimum: 1
-    RugAddress:
-      name: rug
-      in: path
-      required: true
-      schema:
-        type: string
-        pattern: ^0x[a-fA-F0-9]{40}$
 externalDocs:
   description: Human-readable GET-only endpoint reference and trust boundaries
   url: https://rugspull.com/api-reference

@@ -63,7 +63,6 @@ apis:
   name: Rugspull Read API Indexer API
   description: Read-only indexer checkpoints and warnings.
   humanURL: https://rugspull.com/api-reference
-  baseURL: https://rugspull.com
   tags:
   - Indexer
   properties:
@@ -93,7 +92,6 @@ apis:
   name: Rugspull Read API Market API
   description: Event-derived market points and sparklines; not a price oracle.
   humanURL: https://rugspull.com/api-reference
-  baseURL: https://rugspull.com
   tags:
   - Markets
   tags_raw:
@@ -125,7 +123,6 @@ apis:
   name: Rugspull Read API Objects API
   description: Public immutable metadata and image objects.
   humanURL: https://rugspull.com/api-reference
-  baseURL: https://rugspull.com
   tags:
   - Objects
   properties:
@@ -155,7 +152,6 @@ apis:
   name: Rugspull Read API Rugs API
   description: Current-Factory discovery cache and indexed event records.
   humanURL: https://rugspull.com/api-reference
-  baseURL: https://rugspull.com
   tags:
   - Rugs
   properties:
@@ -185,7 +181,6 @@ apis:
   name: Rugspull Read API Service API
   description: Liveness and public configuration.
   humanURL: https://rugspull.com/api-reference
-  baseURL: https://rugspull.com
   tags:
   - Services
   tags_raw:

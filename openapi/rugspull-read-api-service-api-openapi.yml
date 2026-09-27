@@ -42,6 +42,16 @@ paths:
                 $ref: '#/components/schemas/Config'
 components:
   schemas:
+    Health:
+      type: object
+      required:
+      - ok
+      - service
+      properties:
+        ok:
+          const: true
+        service:
+          const: rugspull-api
     Config:
       type: object
       required:
@@ -68,16 +78,6 @@ components:
           type: boolean
         uploadsEnabled:
           type: boolean
-    Health:
-      type: object
-      required:
-      - ok
-      - service
-      properties:
-        ok:
-          const: true
-        service:
-          const: rugspull-api
 externalDocs:
   description: Human-readable GET-only endpoint reference and trust boundaries
   url: https://rugspull.com/api-reference
