@@ -108,21 +108,6 @@ paths:
                       type: object
                       additionalProperties: true
 components:
-  parameters:
-    ChainId:
-      name: chainId
-      in: path
-      required: true
-      schema:
-        type: integer
-        minimum: 1
-    RugAddress:
-      name: rug
-      in: path
-      required: true
-      schema:
-        type: string
-        pattern: ^0x[a-fA-F0-9]{40}$
   schemas:
     RugList:
       type: object
@@ -144,6 +129,21 @@ components:
       properties:
         error:
           type: string
+  parameters:
+    RugAddress:
+      name: rug
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: ^0x[a-fA-F0-9]{40}$
+    ChainId:
+      name: chainId
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
   responses:
     Error:
       description: Request error.

@@ -68,45 +68,7 @@ paths:
         '400':
           $ref: '#/components/responses/Error'
 components:
-  parameters:
-    ChainId:
-      name: chainId
-      in: path
-      required: true
-      schema:
-        type: integer
-        minimum: 1
-    RugAddress:
-      name: rug
-      in: path
-      required: true
-      schema:
-        type: string
-        pattern: ^0x[a-fA-F0-9]{40}$
-  responses:
-    Error:
-      description: Request error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    Sparklines:
-      type: object
-      required:
-      - chainId
-      - sparklines
-      properties:
-        chainId:
-          type: integer
-        sparklines:
-          type: object
-          additionalProperties:
-            type: array
-            maxItems: 16
-            items:
-              type: string
-              pattern: ^[0-9]+$
     Error:
       type: object
       required:
@@ -143,6 +105,44 @@ components:
         stats:
           type: object
           additionalProperties: true
+    Sparklines:
+      type: object
+      required:
+      - chainId
+      - sparklines
+      properties:
+        chainId:
+          type: integer
+        sparklines:
+          type: object
+          additionalProperties:
+            type: array
+            maxItems: 16
+            items:
+              type: string
+              pattern: ^[0-9]+$
+  parameters:
+    RugAddress:
+      name: rug
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: ^0x[a-fA-F0-9]{40}$
+    ChainId:
+      name: chainId
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+  responses:
+    Error:
+      description: Request error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
 externalDocs:
   description: Human-readable GET-only endpoint reference and trust boundaries
   url: https://rugspull.com/api-reference
