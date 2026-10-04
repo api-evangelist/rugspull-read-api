@@ -76,6 +76,22 @@ components:
       properties:
         error:
           type: string
+    Sparklines:
+      type: object
+      required:
+      - chainId
+      - sparklines
+      properties:
+        chainId:
+          type: integer
+        sparklines:
+          type: object
+          additionalProperties:
+            type: array
+            maxItems: 16
+            items:
+              type: string
+              pattern: ^[0-9]+$
     MarketSeries:
       type: object
       required:
@@ -105,22 +121,6 @@ components:
         stats:
           type: object
           additionalProperties: true
-    Sparklines:
-      type: object
-      required:
-      - chainId
-      - sparklines
-      properties:
-        chainId:
-          type: integer
-        sparklines:
-          type: object
-          additionalProperties:
-            type: array
-            maxItems: 16
-            items:
-              type: string
-              pattern: ^[0-9]+$
   parameters:
     RugAddress:
       name: rug

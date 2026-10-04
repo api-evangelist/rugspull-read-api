@@ -109,6 +109,13 @@ paths:
                       additionalProperties: true
 components:
   schemas:
+    Error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: string
     RugList:
       type: object
       required:
@@ -122,13 +129,6 @@ components:
             additionalProperties: true
         nextCursor:
           type: integer
-    Error:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          type: string
   parameters:
     RugAddress:
       name: rug

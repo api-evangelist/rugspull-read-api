@@ -33,6 +33,13 @@ paths:
         '404':
           $ref: '#/components/responses/Error'
 components:
+  responses:
+    Error:
+      description: Request error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     Error:
       type: object
@@ -41,13 +48,6 @@ components:
       properties:
         error:
           type: string
-  responses:
-    Error:
-      description: Request error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
 externalDocs:
   description: Human-readable GET-only endpoint reference and trust boundaries
   url: https://rugspull.com/api-reference
