@@ -1,0 +1,12 @@
+{
+ "url": "https://rugspull.com/openapi.json",
+ "requested_url": "https://rugspull.com/openapi.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 11469,
+ "sha256": "08db450e3b2fd3d20480adca809d3e87dabaf98ec6b8c366fe2ff4a73b286c71",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the archived file is byte-identical to what the provider serves."
+}
