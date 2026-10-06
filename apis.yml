@@ -32,7 +32,7 @@ accessModel:
 image: https://rugspull.com/assets/og-mechanism.png
 url: https://raw.githubusercontent.com/api-evangelist/rugspull-read-api/refs/heads/main/apis.yml
 created: '2026-07-19'
-modified: '2026-09-16'
+modified: '2026-10-06'
 specificationVersion: '0.23'
 tags:
 - BNB Smart Chain
@@ -214,6 +214,8 @@ maintainers:
   url: https://rugspull.com/security-model
   x-source: https://rugspull.com/.well-known/apis.json
 common:
+- url: https://rugspull.com/feed.xml
+  type: BlogRSS
 - type: Website
   url: https://rugspull.com
 - type: AgenticAccess
