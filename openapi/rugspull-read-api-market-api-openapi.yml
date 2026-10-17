@@ -68,6 +68,21 @@ paths:
         '400':
           $ref: '#/components/responses/Error'
 components:
+  parameters:
+    ChainId:
+      name: chainId
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+    RugAddress:
+      name: rug
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: ^0x[a-fA-F0-9]{40}$
   schemas:
     Error:
       type: object
@@ -76,22 +91,6 @@ components:
       properties:
         error:
           type: string
-    Sparklines:
-      type: object
-      required:
-      - chainId
-      - sparklines
-      properties:
-        chainId:
-          type: integer
-        sparklines:
-          type: object
-          additionalProperties:
-            type: array
-            maxItems: 16
-            items:
-              type: string
-              pattern: ^[0-9]+$
     MarketSeries:
       type: object
       required:
@@ -121,21 +120,22 @@ components:
         stats:
           type: object
           additionalProperties: true
-  parameters:
-    RugAddress:
-      name: rug
-      in: path
-      required: true
-      schema:
-        type: string
-        pattern: ^0x[a-fA-F0-9]{40}$
-    ChainId:
-      name: chainId
-      in: path
-      required: true
-      schema:
-        type: integer
-        minimum: 1
+    Sparklines:
+      type: object
+      required:
+      - chainId
+      - sparklines
+      properties:
+        chainId:
+          type: integer
+        sparklines:
+          type: object
+          additionalProperties:
+            type: array
+            maxItems: 16
+            items:
+              type: string
+              pattern: ^[0-9]+$
   responses:
     Error:
       description: Request error.
