@@ -96,3 +96,9 @@ x-rugspull-resources:
   apisJson: https://rugspull.com/.well-known/apis.json
   apiOnboarding: https://rugspull.com/.well-known/api-onboarding
   apiCatalog: https://rugspull.com/.well-known/api-catalog
+x-provenance:
+  method: harvested
+  publisher: Rugspull Read API
+  source: https://rugspull.com/openapi.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
