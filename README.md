@@ -1,4 +1,4 @@
-# rugspull-read-api
+# Rugspull Read API
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,4 +64,130 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-A read-only, GET-only discovery-cache REST API for Rugspull, a self-described high-risk parody DeFi protocol on BNB Smart Chain (chain id 56). Exposes rebuildable discovery/indexed-event data with no write, settlement, or transaction-proxy operations; on-chain BSC contracts remain the source of fina
+A read-only, GET-only discovery-cache REST API for Rugspull, a self-described high-risk parody DeFi protocol on BNB Smart Chain (chain id 56). Exposes rebuildable discovery/indexed-event data with no write, settlement, or transaction-proxy operations; on-chain BSC contracts remain the source of financial truth. Unauthenticated, free, best-effort, with no published rate limits or SLA.
+
+**Areas:** BNB Smart Chain · BSC · wbnb · Read Only · OpenAPI · high-risk · discovery-cache · DeFi · Web3 · crypto-market-data · Indexer
+
+## Rugspull Read API on APIs.io
+
+Everything profiled for Rugspull Read API is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/rugspull-read-api/](https://apis.io/providers/rugspull-read-api/)** — or go straight to one of the APIs or properties below.
+
+### APIs (5)
+
+- [Rugspull Read API Indexer API](https://apis.io/apis/rugspull-read-api/rugspull-read-api-indexer-api/) — Read-only indexer checkpoints and warnings.
+- [Rugspull Read API Market API](https://apis.io/apis/rugspull-read-api/rugspull-read-api-market-api/) — Event-derived market points and sparklines; not a price oracle.
+- [Rugspull Read API Objects API](https://apis.io/apis/rugspull-read-api/rugspull-read-api-objects-api/) — Public immutable metadata and image objects.
+- [Rugspull Read API Rugs API](https://apis.io/apis/rugspull-read-api/rugspull-read-api-rugs-api/) — Current-Factory discovery cache and indexed event records.
+- [Rugspull Read API Service API](https://apis.io/apis/rugspull-read-api/rugspull-read-api-service-api/) — Liveness and public configuration.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [rugspull-read-api-mcp.yml](https://apis.io/servers/rugspull-read-api/rugspull-read-api-mcp-yml/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Rugspull Read Api Agentic Access](https://apis.io/agentic-access/rugspull-read-api/rugspull-read-api-agentic-access/)
+
+#### Collections (1)
+
+Postman and Open Collection request collections.
+
+- [Rugspull Read API](https://apis.io/collections/rugspull-read-api/open-rugspull-read-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Rugspull Read Api Read Api Overlay](https://apis.io/overlays/rugspull-read-api/rugspull-read-api-read-api-overlay/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Rugspull Read Api Authentication](https://apis.io/security/rugspull-read-api/rugspull-read-api-authentication/)
+- [Rugspull Read Api Domain Security](https://apis.io/security/rugspull-read-api/rugspull-read-api-domain-security/)
+- [Rugspull Read Api Vulnerability Disclosure](https://apis.io/security/rugspull-read-api/rugspull-read-api-vulnerability-disclosure/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Rugspull Read Api Plans Pricing](https://apis.io/plans/rugspull-read-api/rugspull-read-api-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Rugspull Read Api Rate Limits](https://apis.io/rate-limits/rugspull-read-api/rugspull-read-api-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://rugspull.com)
+- [Documentation](https://github.com/pqchase/rugspull/blob/main/docs/INTEGRATION.md)
+- [Getting started](https://github.com/pqchase/rugspull/blob/main/docs/INTEGRATION.md#read-the-public-cache)
+- [API reference](https://rugspull.com/api-reference)
+- [Support](https://github.com/pqchase/rugspull/issues)
+- [GitHub](https://github.com/pqchase/rugspull)
+
+## API Evangelist rating
+
+**Kin Score 37.7** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 69.6 |
+| Contract quality | 45.8 |
+| Contract governance | 18.2 |
+| Operational transparency | 28.9 |
+| Developer ergonomics | 61.3 |
+| Access clarity | 0.0 |
+
+**Agent readiness 29.6** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | na |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | na |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | documented (partial credit) |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | yes |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | na |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 22.5** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/rugspull-read-api/](https://apis.io/providers/rugspull-read-api/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Rugspull Read API: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/rugspull-read-api/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
